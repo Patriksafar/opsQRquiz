@@ -1,0 +1,32 @@
+[
+  {
+    "text": "What does HTTP stand for?",
+    "options": [
+      "HyperText Transfer Protocol",
+      "High Throughput Transmission Path",
+      "Hyperlink Transit Procedure",
+      "Hosted Terminal Transfer Protocol"
+    ],
+    "correctIndex": 0
+  },
+  {
+    "text": "Which planet is known as the Red Planet?",
+    "options": ["Venus", "Mars", "Jupiter", "Saturn"],
+    "correctIndex": 1
+  },
+  {
+    "text": "What year did the first iPhone launch?",
+    "options": ["2005", "2006", "2007", "2008"],
+    "correctIndex": 2
+  },
+  {
+    "text": "Which language runs in a web browser natively?",
+    "options": ["Java", "C++", "Python", "JavaScript"],
+    "correctIndex": 3
+  },
+  {
+    "text": "What is the largest ocean on Earth?",
+    "options": ["Atlantic", "Pacific", "Indian", "Arctic"],
+    "correctIndex": 1
+  }
+]
