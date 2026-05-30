@@ -83,7 +83,7 @@ export default function PlayerPage() {
           </h1>
           <p className="mt-2 text-white/60 text-sm">Zadej přezdívku a počkej na start.</p>
         </div>
-        <div className="mt-auto flex flex-col gap-3 pt-6">
+        <div className="flex flex-col gap-3 pt-6">
           <input
             type="text"
             value={nickname}
