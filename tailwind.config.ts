@@ -20,8 +20,8 @@ const config: Config = {
       },
       keyframes: {
         "fade-in": {
-          "0%": { opacity: "0", transform: "translateY(8px)" },
-          "100%": { opacity: "1", transform: "translateY(0)" },
+          "0%": { opacity: "0" },
+          "100%": { opacity: "1" },
         },
         "pulse-ring": {
           "0%, 100%": { transform: "scale(1)" },
@@ -29,7 +29,7 @@ const config: Config = {
         },
       },
       animation: {
-        "fade-in": "fade-in 0.4s ease-out",
+        "fade-in": "fade-in 0.35s ease-out both",
         "pulse-ring": "pulse-ring 1s ease-in-out infinite",
       },
     },

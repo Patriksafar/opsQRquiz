@@ -73,17 +73,17 @@ export default function PlayerPage() {
 
   if (!joined) {
     return (
-      <main className="min-h-screen flex flex-col bg-black text-white">
-        <header className="px-6 pt-10 pb-8">
+      <main className="min-h-svh flex flex-col bg-black text-white px-6 pt-8 pb-6">
+        <div>
           <div className="text-brand-yellow font-display font-black text-xs tracking-[0.3em] uppercase">
             US Launchpad
           </div>
-          <h1 className="font-display font-black text-5xl uppercase leading-[0.95] mt-4 text-balance">
+          <h1 className="font-display font-black text-4xl uppercase leading-[0.95] mt-3 text-balance">
             Pojď do <span className="text-brand-yellow">kvízu</span>
           </h1>
-          <p className="mt-3 text-white/60">Zadej přezdívku a počkej na start.</p>
-        </header>
-        <div className="flex-1 px-6 pb-10 flex flex-col gap-3 justify-end">
+          <p className="mt-2 text-white/60 text-sm">Zadej přezdívku a počkej na start.</p>
+        </div>
+        <div className="mt-auto flex flex-col gap-3 pt-6">
           <input
             type="text"
             value={nickname}
@@ -92,12 +92,12 @@ export default function PlayerPage() {
             placeholder="Tvoje přezdívka"
             maxLength={20}
             autoFocus
-            className="w-full bg-white/5 border-2 border-white/10 rounded-2xl text-2xl text-white text-center placeholder-white/30 px-5 py-5 outline-none focus:border-brand-yellow font-semibold"
+            className="w-full bg-white/5 border-2 border-white/10 rounded-2xl text-2xl text-white text-center placeholder-white/30 px-5 py-4 outline-none focus:border-brand-yellow font-semibold"
           />
           <button
             onClick={handleJoin}
             disabled={!socket || nickname.trim().length === 0}
-            className="w-full bg-brand-yellow text-black font-display font-black text-2xl uppercase tracking-wider py-5 rounded-2xl disabled:opacity-30 active:scale-[0.98] transition-transform"
+            className="w-full bg-brand-yellow text-black font-display font-black text-2xl uppercase tracking-wider py-4 rounded-2xl disabled:opacity-30 active:scale-[0.98] transition-transform"
           >
             Připojit se
           </button>
@@ -113,7 +113,7 @@ export default function PlayerPage() {
 
   if (phase === "lobby") {
     return (
-      <main className="min-h-screen flex flex-col items-center justify-center p-6 bg-black text-white">
+      <main className="min-h-svh flex flex-col items-center justify-center p-6 bg-black text-white">
         <div className="text-brand-yellow font-display font-black text-xs tracking-[0.3em] uppercase">
           Jsi ve hře
         </div>
@@ -134,7 +134,7 @@ export default function PlayerPage() {
     const opts = state.question.options;
     const locked = self?.hasAnsweredCurrent || selected !== null;
     return (
-      <main className="min-h-screen flex flex-col p-4 bg-black text-white">
+      <main className="min-h-svh flex flex-col p-4 bg-black text-white">
         <div className="flex justify-between items-center mb-3 px-1">
           <div className="text-brand-yellow font-display font-black uppercase tracking-widest text-xs">
             Otázka {state.question.index + 1}/{state.question.total}
@@ -200,7 +200,7 @@ export default function PlayerPage() {
     const points = self?.lastAnswerPoints ?? 0;
     return (
       <main
-        className={`min-h-screen flex flex-col items-center justify-center p-6 ${
+        className={`min-h-svh flex flex-col items-center justify-center p-6 ${
           correct ? "bg-brand-yellow text-black" : "bg-black text-white"
         }`}
       >
@@ -222,7 +222,7 @@ export default function PlayerPage() {
 
   if (phase === "leaderboard") {
     return (
-      <main className="min-h-screen flex flex-col items-center justify-center p-6 bg-black text-white">
+      <main className="min-h-svh flex flex-col items-center justify-center p-6 bg-black text-white">
         <div className="text-brand-yellow font-display font-black uppercase tracking-[0.3em] text-xs">
           Průběžný stav
         </div>
@@ -241,7 +241,7 @@ export default function PlayerPage() {
 
   if (phase === "ended") {
     return (
-      <main className="min-h-screen flex flex-col items-center justify-center p-6 bg-brand-yellow text-black">
+      <main className="min-h-svh flex flex-col items-center justify-center p-6 bg-brand-yellow text-black">
         <div className="font-display font-black uppercase tracking-[0.3em] text-xs">
           Konec hry
         </div>

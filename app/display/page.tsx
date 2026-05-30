@@ -21,7 +21,7 @@ export default function DisplayPage() {
       QRCode.toString(url, {
         type: "svg",
         margin: 1,
-        width: 520,
+        width: 360,
         color: { dark: "#000000", light: "#ffed00" },
       })
         .then(setQrSvg)
@@ -88,57 +88,56 @@ function Lobby({
 }) {
   const players = state?.players ?? [];
   return (
-    <main className="min-h-screen p-10 pt-20 bg-black text-white overflow-hidden relative">
+    <main className="min-h-svh bg-black text-white overflow-hidden relative">
       <BrandStripe />
 
-      <div className="absolute top-24 left-10 right-10 flex justify-between items-start z-10">
-        <div>
-          <div className="font-display font-black text-brand-yellow text-7xl uppercase leading-[0.9]">
-            Připoj se
+      {/* Main 3-column grid: headline | QR | counter */}
+      <div className="pt-20 px-10 min-h-svh flex flex-col">
+        <div className="grid grid-cols-[1fr_auto_1fr] gap-10 items-center flex-1 pb-[35vh]">
+          <div className="z-10">
+            <div className="font-display font-black text-brand-yellow text-6xl uppercase leading-[0.9]">
+              Připoj se
+            </div>
+            <div className="font-display font-black text-6xl uppercase leading-[0.9] mt-2">
+              do <span className="text-brand-yellow">kvízu</span>
+            </div>
+            <div className="text-white/60 mt-5 text-lg max-w-sm">
+              Naskenuj QR kód mobilem a&nbsp;zadej přezdívku.
+            </div>
           </div>
-          <div className="font-display font-black text-7xl uppercase leading-[0.9] mt-2">
-            do <span className="text-brand-yellow">kvízu</span>
+
+          <div className="flex justify-center">
+            <div className="bg-brand-yellow rounded-3xl p-5 shadow-2xl border-4 border-black">
+              {qrSvg ? (
+                <div
+                  className="w-[360px] h-[360px]"
+                  dangerouslySetInnerHTML={{ __html: qrSvg }}
+                />
+              ) : (
+                <div className="w-[360px] h-[360px] bg-black/10 animate-pulse rounded-2xl" />
+              )}
+              <div className="mt-3 text-center text-black font-display font-black text-lg">
+                {joinUrl.replace(/^https?:\/\//, "").replace(/\/$/, "")}
+              </div>
+              <div className="text-center text-black/70 font-semibold uppercase text-[10px] tracking-widest mt-0.5">
+                Sken pro připojení
+              </div>
+            </div>
           </div>
-          <div className="text-white/60 mt-6 text-2xl max-w-md">
-            Naskenuj QR kód mobilem a zadej přezdívku.
-          </div>
-        </div>
-        <div className="text-right">
-          <div className="text-white/40 text-sm uppercase tracking-widest">Hráčů</div>
-          <div className="font-display font-black text-brand-yellow text-8xl tabular-nums leading-none">
-            {players.length}
+
+          <div className="text-right z-10">
+            <div className="text-white/40 text-sm uppercase tracking-widest">Hráčů</div>
+            <div className="font-display font-black text-brand-yellow text-7xl tabular-nums leading-none">
+              {players.length}
+            </div>
           </div>
         </div>
       </div>
 
-      <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-        <div className="bg-brand-yellow rounded-3xl p-6 shadow-2xl border-8 border-black ring-4 ring-brand-yellow">
-          {qrSvg ? (
-            <div
-              className="w-[520px] h-[520px]"
-              dangerouslySetInnerHTML={{ __html: qrSvg }}
-            />
-          ) : (
-            <div className="w-[520px] h-[520px] bg-black/10 animate-pulse rounded-2xl" />
-          )}
-          <div className="mt-5 text-center text-black font-display font-black text-2xl">
-            {joinUrl.replace(/^https?:\/\//, "")}
-          </div>
-          <div className="text-center text-black/70 font-semibold uppercase text-xs tracking-widest mt-1">
-            Sken pro připojení
-          </div>
-        </div>
-      </div>
-
+      {/* Floating names — constrained to bottom band so they never overlap headline/QR/counter */}
       <div className="absolute inset-0 pointer-events-none">
         {players.map((p, i) => (
-          <FloatingName
-            key={p.id}
-            name={p.nickname}
-            angle={p.angle}
-            index={i}
-            total={players.length}
-          />
+          <FloatingName key={p.id} name={p.nickname} angle={p.angle} index={i} />
         ))}
       </div>
     </main>
@@ -153,41 +152,46 @@ function FloatingName({
   name: string;
   angle: number;
   index: number;
-  total: number;
 }) {
   const pos = useMemo(() => placeAround(index), [index]);
   // Alternate yellow chip / black chip with yellow border for variety
   const variant = index % 2 === 0;
   return (
+    // Outer: positioning only (centered at coords). Animation here would conflict with translate.
     <div
-      className="absolute animate-fade-in"
+      className="absolute"
       style={{
         left: `${pos.x}%`,
         top: `${pos.y}%`,
-        transform: `translate(-50%, -50%) rotate(${angle}deg)`,
+        transform: "translate(-50%, -50%)",
       }}
     >
-      <div
-        className={`px-6 py-3 rounded-2xl font-display font-black text-3xl uppercase shadow-2xl
-          ${
-            variant
-              ? "bg-brand-yellow text-black"
-              : "bg-black text-brand-yellow border-4 border-brand-yellow"
-          }`}
-      >
-        {name}
+      {/* Inner: rotation + opacity fade-in. Animation only touches opacity, so the rotation sticks. */}
+      <div className="animate-fade-in" style={{ transform: `rotate(${angle}deg)` }}>
+        <div
+          className={`px-5 py-2.5 rounded-2xl font-display font-black text-2xl uppercase shadow-2xl whitespace-nowrap
+            ${
+              variant
+                ? "bg-brand-yellow text-black"
+                : "bg-black text-brand-yellow border-4 border-brand-yellow"
+            }`}
+        >
+          {name}
+        </div>
       </div>
     </div>
   );
 }
 
+// Safe zone: bottom 30% of the screen, distributed horizontally.
+// Never overlaps the headline (top-left), QR (center), or counter (top-right).
 function placeAround(index: number) {
   const slots = [
-    { x: 10, y: 28 }, { x: 90, y: 28 }, { x: 10, y: 72 }, { x: 90, y: 72 },
-    { x: 18, y: 50 }, { x: 82, y: 50 }, { x: 30, y: 20 }, { x: 70, y: 20 },
-    { x: 30, y: 80 }, { x: 70, y: 80 }, { x: 6, y: 50 }, { x: 94, y: 50 },
-    { x: 14, y: 38 }, { x: 86, y: 38 }, { x: 14, y: 62 }, { x: 86, y: 62 },
-    { x: 26, y: 32 }, { x: 74, y: 32 }, { x: 26, y: 68 }, { x: 74, y: 68 },
+    { x: 12, y: 78 }, { x: 30, y: 84 }, { x: 50, y: 79 }, { x: 70, y: 84 }, { x: 88, y: 78 },
+    { x: 20, y: 92 }, { x: 40, y: 90 }, { x: 60, y: 90 }, { x: 80, y: 92 },
+    { x: 8, y: 86 }, { x: 92, y: 86 }, { x: 25, y: 75 }, { x: 75, y: 75 },
+    { x: 15, y: 82 }, { x: 85, y: 82 }, { x: 35, y: 88 }, { x: 65, y: 88 },
+    { x: 45, y: 95 }, { x: 55, y: 95 }, { x: 5, y: 78 },
   ];
   return slots[index % slots.length];
 }
