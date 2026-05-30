@@ -64,6 +64,21 @@ app.prepare().then(() => {
       if (self) socket.emit("self", self);
     });
 
+    socket.on("player:rejoin", (playerId, cb) => {
+      const player = game.getPlayer(playerId);
+      if (!player) {
+        cb({ ok: false, error: "Player not found" });
+        return;
+      }
+      socketToPlayer.set(socket.id, playerId);
+      const set = playerSockets.get(playerId) ?? new Set();
+      set.add(socket.id);
+      playerSockets.set(playerId, set);
+      cb({ ok: true, id: playerId, nickname: player.nickname });
+      const self = game.getPlayerSelfState(playerId);
+      if (self) socket.emit("self", self);
+    });
+
     socket.on("player:answer", (optionIndex) => {
       const playerId = socketToPlayer.get(socket.id);
       if (!playerId) return;

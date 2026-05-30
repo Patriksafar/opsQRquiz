@@ -69,6 +69,7 @@ export type ServerToClientEvents = {
 
 export type ClientToServerEvents = {
   "player:join": (nickname: string, cb: (res: { ok: true; id: string } | { ok: false; error: string }) => void) => void;
+  "player:rejoin": (playerId: string, cb: (res: { ok: true; id: string; nickname: string } | { ok: false; error: string }) => void) => void;
   "player:answer": (optionIndex: number) => void;
   "admin:auth": (secret: string, cb: (res: { ok: boolean }) => void) => void;
   "admin:start": (secret: string) => void;

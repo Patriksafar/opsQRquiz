@@ -5,16 +5,63 @@ import { useSocket } from "@/lib/use-socket";
 import type { PlayerSelfState, PublicState } from "@/lib/types";
 
 const OPTION_LETTERS = ["A", "B", "C", "D", "E", "F"];
+const QUERY_KEY = "p";
+
+function readSavedId(): string | null {
+  if (typeof window === "undefined") return null;
+  return new URLSearchParams(window.location.search).get(QUERY_KEY);
+}
+
+function saveIdToUrl(id: string) {
+  if (typeof window === "undefined") return;
+  const url = new URL(window.location.href);
+  url.searchParams.set(QUERY_KEY, id);
+  window.history.replaceState(null, "", url.toString());
+}
+
+function clearIdFromUrl() {
+  if (typeof window === "undefined") return;
+  const url = new URL(window.location.href);
+  url.searchParams.delete(QUERY_KEY);
+  window.history.replaceState(null, "", url.toString());
+}
 
 export default function PlayerPage() {
   const socket = useSocket();
   const [nickname, setNickname] = useState("");
   const [joinError, setJoinError] = useState<string | null>(null);
   const [joined, setJoined] = useState(false);
+  // `bootstrapped` flips true after we've resolved the auto-rejoin probe.
+  // Until then we show a tiny spinner instead of flashing the join form.
+  const [bootstrapped, setBootstrapped] = useState(false);
   const [state, setState] = useState<PublicState | null>(null);
   const [self, setSelf] = useState<PlayerSelfState | null>(null);
   const [selected, setSelected] = useState<number | null>(null);
   const [now, setNow] = useState(Date.now());
+
+  // Try to rejoin once the socket is up.
+  useEffect(() => {
+    if (!socket) return;
+    let cancelled = false;
+    const saved = readSavedId();
+    if (!saved) {
+      setBootstrapped(true);
+      return;
+    }
+    socket.emit("player:rejoin", saved, (res) => {
+      if (cancelled) return;
+      if (res.ok) {
+        setJoined(true);
+      } else {
+        // Server doesn't know this id (restart, reset, or stale id) — drop it.
+        clearIdFromUrl();
+      }
+      setBootstrapped(true);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [socket]);
 
   useEffect(() => {
     if (!socket) return;
@@ -33,6 +80,16 @@ export default function PlayerPage() {
     };
   }, [socket]);
 
+  // If the admin resets the game, the server stops knowing about us — drop the URL id.
+  useEffect(() => {
+    if (!joined || !state || !self) return;
+    if (state.phase === "lobby" && !state.players.some((p) => p.id === self.id)) {
+      clearIdFromUrl();
+      setJoined(false);
+      setSelf(null);
+    }
+  }, [state, self, joined]);
+
   useEffect(() => {
     const t = setInterval(() => setNow(Date.now()), 200);
     return () => clearInterval(t);
@@ -44,6 +101,7 @@ export default function PlayerPage() {
     if (!value) return;
     socket.emit("player:join", value, (res) => {
       if (res.ok) {
+        saveIdToUrl(res.id);
         setJoined(true);
         setJoinError(null);
       } else {
@@ -70,6 +128,15 @@ export default function PlayerPage() {
     const idx = all.findIndex((p) => p.id === self.id);
     return idx === -1 ? null : idx + 1;
   }, [state, self]);
+
+  // Avoid flashing the join form while we wait for the rejoin probe to resolve.
+  if (!bootstrapped) {
+    return (
+      <main className="min-h-svh flex items-center justify-center bg-black text-white">
+        <div className="w-10 h-10 rounded-full border-4 border-white/10 border-t-brand-yellow animate-spin" />
+      </main>
+    );
+  }
 
   if (!joined) {
     return (
