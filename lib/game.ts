@@ -128,7 +128,8 @@ export class GameEngine {
 
   submitAnswer(playerId: string, optionIndex: number) {
     if (this.phase !== "question" || !this.round) return;
-    if (optionIndex < 0 || optionIndex > 3) return;
+    const question = this.questions[this.currentIndex];
+    if (optionIndex < 0 || optionIndex >= question.options.length) return;
     const player = this.players.get(playerId);
     if (!player) return;
     if (this.round.answers.has(playerId)) return;
@@ -137,7 +138,6 @@ export class GameEngine {
     const elapsed = now - this.round.startedAt;
     if (elapsed >= QUESTION_DURATION_MS) return;
 
-    const question = this.questions[this.currentIndex];
     const correct = optionIndex === question.correctIndex;
     let points = 0;
     if (correct) {
@@ -180,7 +180,7 @@ export class GameEngine {
     this.clearTimer();
     if (!this.round) return;
     const question = this.questions[this.currentIndex];
-    const perOption = [0, 0, 0, 0];
+    const perOption = new Array(question.options.length).fill(0);
     for (const a of this.round.answers.values()) {
       perOption[a.optionIndex] = (perOption[a.optionIndex] ?? 0) + 1;
     }

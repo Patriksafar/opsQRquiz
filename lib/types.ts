@@ -1,7 +1,7 @@
 export type Question = {
   text: string;
-  options: [string, string, string, string];
-  correctIndex: 0 | 1 | 2 | 3;
+  options: string[];
+  correctIndex: number;
 };
 
 export type Phase = "lobby" | "question" | "reveal" | "leaderboard" | "ended";

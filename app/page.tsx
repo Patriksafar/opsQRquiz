@@ -4,12 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useSocket } from "@/lib/use-socket";
 import type { PlayerSelfState, PublicState } from "@/lib/types";
 
-const OPTION_STYLES = [
-  { bg: "bg-quiz-red", label: "A", shape: "△" },
-  { bg: "bg-quiz-blue", label: "B", shape: "◇" },
-  { bg: "bg-quiz-yellow", label: "C", shape: "○" },
-  { bg: "bg-quiz-green", label: "D", shape: "□" },
-];
+const OPTION_LETTERS = ["A", "B", "C", "D", "E", "F"];
 
 export default function PlayerPage() {
   const socket = useSocket();
@@ -18,11 +13,17 @@ export default function PlayerPage() {
   const [joined, setJoined] = useState(false);
   const [state, setState] = useState<PublicState | null>(null);
   const [self, setSelf] = useState<PlayerSelfState | null>(null);
+  const [selected, setSelected] = useState<number | null>(null);
   const [now, setNow] = useState(Date.now());
 
   useEffect(() => {
     if (!socket) return;
-    const onState = (s: PublicState) => setState(s);
+    const onState = (s: PublicState) => {
+      setState((prev) => {
+        if (prev?.question?.index !== s.question?.index) setSelected(null);
+        return s;
+      });
+    };
     const onSelf = (s: PlayerSelfState) => setSelf(s);
     socket.on("state", onState);
     socket.on("self", onSelf);
@@ -53,7 +54,8 @@ export default function PlayerPage() {
 
   const handleAnswer = (idx: number) => {
     if (!socket) return;
-    if (self?.hasAnsweredCurrent) return;
+    if (self?.hasAnsweredCurrent || selected !== null) return;
+    setSelected(idx);
     socket.emit("player:answer", idx);
   };
 
@@ -71,29 +73,36 @@ export default function PlayerPage() {
 
   if (!joined) {
     return (
-      <main className="min-h-screen flex flex-col items-center justify-center p-6 bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-800">
-        <h1 className="text-4xl font-extrabold mb-2 text-white">Join the Quiz</h1>
-        <p className="text-white/70 mb-8 text-center">Pick a nickname to enter the game</p>
-        <div className="w-full max-w-sm flex flex-col gap-3">
+      <main className="min-h-screen flex flex-col bg-black text-white">
+        <header className="px-6 pt-10 pb-8">
+          <div className="text-brand-yellow font-display font-black text-xs tracking-[0.3em] uppercase">
+            US Launchpad
+          </div>
+          <h1 className="font-display font-black text-5xl uppercase leading-[0.95] mt-4 text-balance">
+            Pojď do <span className="text-brand-yellow">kvízu</span>
+          </h1>
+          <p className="mt-3 text-white/60">Zadej přezdívku a počkej na start.</p>
+        </header>
+        <div className="flex-1 px-6 pb-10 flex flex-col gap-3 justify-end">
           <input
             type="text"
             value={nickname}
             onChange={(e) => setNickname(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && handleJoin()}
-            placeholder="Your nickname"
+            placeholder="Tvoje přezdívka"
             maxLength={20}
             autoFocus
-            className="w-full bg-white/10 backdrop-blur rounded-2xl text-2xl text-white text-center placeholder-white/40 px-5 py-4 outline-none border-2 border-transparent focus:border-white/40"
+            className="w-full bg-white/5 border-2 border-white/10 rounded-2xl text-2xl text-white text-center placeholder-white/30 px-5 py-5 outline-none focus:border-brand-yellow font-semibold"
           />
           <button
             onClick={handleJoin}
             disabled={!socket || nickname.trim().length === 0}
-            className="w-full bg-white text-indigo-900 font-bold text-xl py-4 rounded-2xl disabled:opacity-40 active:scale-95 transition-transform"
+            className="w-full bg-brand-yellow text-black font-display font-black text-2xl uppercase tracking-wider py-5 rounded-2xl disabled:opacity-30 active:scale-[0.98] transition-transform"
           >
-            Join
+            Připojit se
           </button>
           {joinError && (
-            <div className="text-red-200 text-center font-medium">{joinError}</div>
+            <div className="text-rose-400 text-center font-semibold mt-1">{joinError}</div>
           )}
         </div>
       </main>
@@ -104,44 +113,84 @@ export default function PlayerPage() {
 
   if (phase === "lobby") {
     return (
-      <main className="min-h-screen flex flex-col items-center justify-center p-6 bg-gradient-to-br from-emerald-800 via-teal-900 to-cyan-900">
-        <div className="text-white/60 uppercase tracking-widest text-sm">You're in</div>
-        <div className="text-5xl font-extrabold mt-2 mb-8 text-white">{self?.nickname}</div>
-        <div className="w-20 h-20 rounded-full border-4 border-white/30 border-t-white animate-spin mb-6" />
-        <div className="text-white/80 text-xl">Waiting for the host to start…</div>
-        <div className="mt-6 text-white/50">{state?.players.length ?? 0} player{(state?.players.length ?? 0) === 1 ? "" : "s"} in lobby</div>
+      <main className="min-h-screen flex flex-col items-center justify-center p-6 bg-black text-white">
+        <div className="text-brand-yellow font-display font-black text-xs tracking-[0.3em] uppercase">
+          Jsi ve hře
+        </div>
+        <div className="font-display font-black text-5xl mt-3 mb-10 text-balance text-center">
+          {self?.nickname}
+        </div>
+        <div className="w-16 h-16 rounded-full border-4 border-white/10 border-t-brand-yellow animate-spin mb-6" />
+        <div className="text-white/70 text-xl">Čekáme na start…</div>
+        <div className="mt-4 text-white/40 text-sm">
+          {state?.players.length ?? 0}{" "}
+          {pluralize(state?.players.length ?? 0, "hráč", "hráči", "hráčů")} v lobby
+        </div>
       </main>
     );
   }
 
   if (phase === "question" && state?.question) {
-    if (self?.hasAnsweredCurrent) {
-      return (
-        <main className="min-h-screen flex flex-col items-center justify-center p-6 bg-gradient-to-br from-indigo-900 to-purple-900">
-          <div className="text-white/60 uppercase tracking-widest text-sm">Answer locked in</div>
-          <div className="text-5xl font-extrabold mt-2 mb-6 text-white">Nice!</div>
-          <div className="text-white/70 text-xl">Hang tight for the reveal…</div>
-          <div className="mt-8 text-7xl font-mono text-white/90">{secondsLeft}</div>
-        </main>
-      );
-    }
+    const opts = state.question.options;
+    const locked = self?.hasAnsweredCurrent || selected !== null;
     return (
-      <main className="min-h-screen flex flex-col p-3 bg-slate-950">
-        <div className="flex justify-between items-center mb-3 px-2">
-          <div className="text-white/60 text-sm">Q{state.question.index + 1}/{state.question.total}</div>
-          <div className="text-3xl font-mono text-white">{secondsLeft}</div>
+      <main className="min-h-screen flex flex-col p-4 bg-black text-white">
+        <div className="flex justify-between items-center mb-3 px-1">
+          <div className="text-brand-yellow font-display font-black uppercase tracking-widest text-xs">
+            Otázka {state.question.index + 1}/{state.question.total}
+          </div>
+          <div
+            className={`font-display font-black text-3xl tabular-nums ${
+              secondsLeft <= 3 ? "text-rose-400" : "text-brand-yellow"
+            }`}
+          >
+            {secondsLeft}s
+          </div>
         </div>
-        <div className="grid grid-cols-2 grid-rows-2 gap-3 flex-1">
-          {OPTION_STYLES.map((opt, i) => (
-            <button
-              key={i}
-              onClick={() => handleAnswer(i)}
-              className={`${opt.bg} rounded-3xl flex items-center justify-center text-white font-extrabold text-7xl active:scale-95 transition-transform shadow-lg`}
-            >
-              {opt.shape}
-            </button>
-          ))}
+        <div className="h-1.5 bg-white/10 rounded-full overflow-hidden mb-4">
+          <div
+            className="h-full bg-brand-yellow transition-all duration-200 ease-linear"
+            style={{ width: `${(secondsLeft / 10) * 100}%` }}
+          />
         </div>
+        <div className="bg-brand-smoke border border-brand-line rounded-2xl p-5 mb-4">
+          <div className="font-display font-bold text-lg leading-snug text-balance">
+            {state.question.text}
+          </div>
+        </div>
+        <div className="flex flex-col gap-3 flex-1 pb-2">
+          {opts.map((opt, i) => {
+            const isSelected = selected === i;
+            return (
+              <button
+                key={i}
+                onClick={() => handleAnswer(i)}
+                disabled={locked}
+                className={`group text-left rounded-2xl px-4 py-4 flex items-center gap-3 active:scale-[0.98] transition-all font-semibold text-base leading-snug
+                  ${
+                    isSelected
+                      ? "bg-brand-yellow text-black"
+                      : locked
+                      ? "bg-brand-smoke text-white/40 border-2 border-brand-line"
+                      : "bg-brand-smoke text-white border-2 border-brand-line hover:border-brand-yellow"
+                  }`}
+              >
+                <span
+                  className={`shrink-0 w-10 h-10 rounded-xl flex items-center justify-center font-display font-black text-xl
+                    ${isSelected ? "bg-black text-brand-yellow" : "bg-brand-yellow text-black"}`}
+                >
+                  {OPTION_LETTERS[i]}
+                </span>
+                <span className="flex-1">{opt}</span>
+              </button>
+            );
+          })}
+        </div>
+        {locked && (
+          <div className="mt-2 text-center text-white/50 text-sm">
+            Odpověď odeslána · čekáme na ostatní…
+          </div>
+        )}
       </main>
     );
   }
@@ -150,27 +199,41 @@ export default function PlayerPage() {
     const correct = self?.lastAnswerCorrect;
     const points = self?.lastAnswerPoints ?? 0;
     return (
-      <main className={`min-h-screen flex flex-col items-center justify-center p-6 ${correct ? "bg-gradient-to-br from-green-600 to-emerald-800" : "bg-gradient-to-br from-rose-700 to-red-900"}`}>
-        <div className="text-white/80 uppercase tracking-widest text-sm">{correct ? "Correct!" : "Wrong"}</div>
-        <div className="text-7xl font-extrabold my-4 text-white">{correct ? "🎉" : "💥"}</div>
+      <main
+        className={`min-h-screen flex flex-col items-center justify-center p-6 ${
+          correct ? "bg-brand-yellow text-black" : "bg-black text-white"
+        }`}
+      >
+        <div className="font-display font-black uppercase tracking-[0.3em] text-xs">
+          {correct ? "Správně!" : "Špatně"}
+        </div>
+        <div className="text-8xl font-black my-6">{correct ? "🎉" : "💥"}</div>
         {correct ? (
-          <div className="text-3xl font-bold text-white">+{points} pts</div>
+          <div className="font-display font-black text-4xl">+{points} bodů</div>
         ) : (
-          <div className="text-2xl text-white/80">No points this round</div>
+          <div className="text-xl opacity-70">Tentokrát bez bodů</div>
         )}
-        <div className="mt-10 text-white/70">Total: <span className="font-bold text-white">{self?.score ?? 0}</span></div>
+        <div className="mt-10 opacity-70">
+          Celkem: <span className="font-display font-black">{self?.score ?? 0}</span>
+        </div>
       </main>
     );
   }
 
   if (phase === "leaderboard") {
     return (
-      <main className="min-h-screen flex flex-col items-center justify-center p-6 bg-gradient-to-br from-slate-900 to-indigo-950">
-        <div className="text-white/60 uppercase tracking-widest text-sm">Standings</div>
-        <div className="text-7xl font-extrabold my-4 text-white">{self?.score ?? 0}</div>
-        <div className="text-white/70 text-xl">points</div>
+      <main className="min-h-screen flex flex-col items-center justify-center p-6 bg-black text-white">
+        <div className="text-brand-yellow font-display font-black uppercase tracking-[0.3em] text-xs">
+          Průběžný stav
+        </div>
+        <div className="font-display font-black text-7xl my-4 text-brand-yellow">
+          {self?.score ?? 0}
+        </div>
+        <div className="text-white/60">bodů</div>
         {myRank && (
-          <div className="mt-6 text-white/80">Rank: <span className="font-bold text-white text-2xl">#{myRank}</span></div>
+          <div className="mt-8 text-xl">
+            Pořadí: <span className="font-display font-black text-2xl">#{myRank}</span>
+          </div>
         )}
       </main>
     );
@@ -178,13 +241,15 @@ export default function PlayerPage() {
 
   if (phase === "ended") {
     return (
-      <main className="min-h-screen flex flex-col items-center justify-center p-6 bg-gradient-to-br from-amber-700 via-orange-800 to-rose-900">
-        <div className="text-white/70 uppercase tracking-widest text-sm">Game over</div>
-        <div className="text-6xl font-extrabold my-4 text-white">{self?.score ?? 0}</div>
-        <div className="text-white/80">final score</div>
+      <main className="min-h-screen flex flex-col items-center justify-center p-6 bg-brand-yellow text-black">
+        <div className="font-display font-black uppercase tracking-[0.3em] text-xs">
+          Konec hry
+        </div>
+        <div className="font-display font-black text-7xl my-4">{self?.score ?? 0}</div>
+        <div>finální skóre</div>
         {myRank && (
-          <div className="mt-6 text-2xl text-white">
-            You finished <span className="font-extrabold">#{myRank}</span>
+          <div className="mt-6 text-2xl">
+            Skončil/a jsi <span className="font-display font-black">#{myRank}</span>
           </div>
         )}
       </main>
@@ -192,4 +257,10 @@ export default function PlayerPage() {
   }
 
   return null;
+}
+
+function pluralize(n: number, one: string, few: string, many: string) {
+  if (n === 1) return one;
+  if (n >= 2 && n <= 4) return few;
+  return many;
 }

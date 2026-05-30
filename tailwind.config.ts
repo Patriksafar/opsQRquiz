@@ -5,15 +5,18 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        quiz: {
-          red: "#e21b3c",
-          blue: "#1368ce",
-          yellow: "#d89e00",
-          green: "#26890c",
+        brand: {
+          yellow: "#ffed00",
+          "yellow-soft": "#fff46a",
+          black: "#000000",
+          ink: "#0a0a0a",
+          smoke: "#1a1a1a",
+          line: "#262626",
         },
       },
       fontFamily: {
-        display: ["ui-sans-serif", "system-ui", "sans-serif"],
+        sans: ["var(--font-montserrat)", "ui-sans-serif", "system-ui", "sans-serif"],
+        display: ["var(--font-poppins)", "var(--font-montserrat)", "ui-sans-serif", "sans-serif"],
       },
       keyframes: {
         "fade-in": {

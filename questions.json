@@ -1,32 +1,80 @@
 [
   {
-    "text": "What does HTTP stand for?",
+    "text": "Dokdy je potřeba nahlásit zaměstnance cizince prostřednictvím JMHZ?",
     "options": [
-      "HyperText Transfer Protocol",
-      "High Throughput Transmission Path",
-      "Hyperlink Transit Procedure",
-      "Hosted Terminal Transfer Protocol"
+      "Nejpozději v den nástupu",
+      "Nejpozději 8 dnů po nástupu stejně jako tuzemští zaměstnanci",
+      "Nejpozději den před nástupem"
+    ],
+    "correctIndex": 2
+  },
+  {
+    "text": "Aby byla pracovní smlouva platná, musí obsahovat alespoň tyto náležitosti:",
+    "options": [
+      "Druh práce (pracovní pozice), místo výkonu práce, den nástupu do práce, mzdu",
+      "Druh práce (pracovní pozice), místo výkonu práce, den nástupu do práce",
+      "Zkušební dobu, druh práce (pracovní pozice), místo výkonu práce, den nástupu do práce, mzdu"
+    ],
+    "correctIndex": 1
+  },
+  {
+    "text": "Je nutné sjednávat (ať už v rámci pracovní smlouvy nebo vnitřního předpisu) mlčenlivost o mzdě zaměstnanců?",
+    "options": [
+      "Ano",
+      "Ne",
+      "V rámci flexinovely je to nově na uvážení zaměstnavatele"
+    ],
+    "correctIndex": 1
+  },
+  {
+    "text": "Budovu, ve které se nyní nacházíme, byste zařadili do jaké kategorie dle požárního nebezpečí?",
+    "options": [
+      "Bez zvýšeného požárního nebezpečí",
+      "Se zvýšeným požárním nebezpečím",
+      "S vysokým požárním nebezpečím"
+    ],
+    "correctIndex": 1
+  },
+  {
+    "text": "Co je součástí dokumentace PO (požární ochrany)?",
+    "options": [
+      "Poplachová směrnice, evakuační plán, zápis z požárního poplachu",
+      "Poplachová směrnice, evakuační plán, zápis z požárního poplachu, faktury za objednávky hasicích přístrojů",
+      "Poplachová směrnice, evakuační plán, zápis z požárního poplachu, podepsaný certifikát o absolvovaném školení"
     ],
     "correctIndex": 0
   },
   {
-    "text": "Which planet is known as the Red Planet?",
-    "options": ["Venus", "Mars", "Jupiter", "Saturn"],
-    "correctIndex": 1
-  },
-  {
-    "text": "What year did the first iPhone launch?",
-    "options": ["2005", "2006", "2007", "2008"],
+    "text": "Záznamy o pracovní době zaměstnanců je nám, dle zákona o účetnictví, nařízeno uchovávat:",
+    "options": ["2 roky", "5 let", "10 let"],
     "correctIndex": 2
   },
   {
-    "text": "Which language runs in a web browser natively?",
-    "options": ["Java", "C++", "Python", "JavaScript"],
-    "correctIndex": 3
+    "text": "Srážka ze mzdy zaměstnance může být:",
+    "options": [
+      "Pouze zákonného charakteru (daně, exekuce apod.)",
+      "Zákonného i jiného charakteru (v případě jiného charakteru však pouze s písemným souhlasem zaměstnance)",
+      "Zákonného i jiného charakteru, a to v obou případech bez písemného souhlasu zaměstnance"
+    ],
+    "correctIndex": 1
   },
   {
-    "text": "What is the largest ocean on Earth?",
-    "options": ["Atlantic", "Pacific", "Indian", "Arctic"],
-    "correctIndex": 1
+    "text": "Kdy musí zaměstnavatel nahlásit incident spojený s únikem nebo ztrátou osobních údajů Úřadu pro ochranu osobních údajů?",
+    "options": ["Ihned bez prodlení", "Do 48 hodin", "Do 72 hodin"],
+    "correctIndex": 2
+  },
+  {
+    "text": "Který z následujících nákladů bývá standardně neuznatelný při vyúčtování služební cesty?",
+    "options": ["Jízdenka na vlak", "Ubytování schválené firmou", "Soukromé wellness"],
+    "correctIndex": 2
+  },
+  {
+    "text": "Co obvykle musí obsahovat cestovní příkaz před zahájením služební cesty?",
+    "options": [
+      "Schválení nadřízeného a účel cesty",
+      "Kopii občanského průkazu",
+      "Hodnocení hotelu"
+    ],
+    "correctIndex": 0
   }
 ]
