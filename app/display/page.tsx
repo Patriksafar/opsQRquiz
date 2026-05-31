@@ -112,7 +112,7 @@ function Lobby({
           <div className="bg-brand-yellow rounded-3xl p-3 md:p-5 shadow-2xl border-4 border-black">
             {qrSvg ? (
               <div
-                className="w-[230px] h-[230px] md:w-[360px] md:h-[360px]"
+                className="w-[230px] h-[230px] md:w-[360px] md:h-[360px] [&>svg]:w-full [&>svg]:h-full [&>svg]:block"
                 dangerouslySetInnerHTML={{ __html: qrSvg }}
               />
             ) : (
