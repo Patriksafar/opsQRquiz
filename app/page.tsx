@@ -217,7 +217,7 @@ export default function PlayerPage() {
         <div className="h-1.5 bg-black/10 rounded-full overflow-hidden mb-4">
           <div
             className="h-full bg-black transition-all duration-200 ease-linear"
-            style={{ width: `${(secondsLeft / 10) * 100}%` }}
+            style={{ width: `${(secondsLeft / 20) * 100}%` }}
           />
         </div>
         <div className="bg-black text-white rounded-2xl p-5 mb-4">
