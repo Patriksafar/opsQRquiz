@@ -132,23 +132,23 @@ export default function PlayerPage() {
   // Avoid flashing the join form while we wait for the rejoin probe to resolve.
   if (!bootstrapped) {
     return (
-      <main className="min-h-svh flex items-center justify-center bg-black text-white">
-        <div className="w-10 h-10 rounded-full border-4 border-white/10 border-t-brand-yellow animate-spin" />
+      <main className="min-h-svh flex items-center justify-center bg-brand-yellow text-black">
+        <div className="w-10 h-10 rounded-full border-4 border-black/10 border-t-black animate-spin" />
       </main>
     );
   }
 
   if (!joined) {
     return (
-      <main className="min-h-svh flex flex-col bg-black text-white px-6 pt-8 pb-6">
+      <main className="min-h-svh flex flex-col bg-brand-yellow text-black px-6 pt-8 pb-6">
         <div>
-          <div className="text-brand-yellow font-display font-black text-xs tracking-[0.3em] uppercase">
+          <div className="font-display font-black text-xs tracking-[0.3em] uppercase">
             US Launchpad
           </div>
           <h1 className="font-display font-black text-4xl uppercase leading-[0.95] mt-3 text-balance">
-            Pojď do <span className="text-brand-yellow">kvízu</span>
+            Pojď do <span className="bg-black text-brand-yellow px-2 inline-block">kvízu</span>
           </h1>
-          <p className="mt-2 text-white/60 text-sm">Zadej přezdívku a počkej na start.</p>
+          <p className="mt-2 text-black/60 text-sm">Zadej přezdívku a počkej na start.</p>
         </div>
         <div className="flex flex-col gap-3 pt-6">
           <input
@@ -159,17 +159,17 @@ export default function PlayerPage() {
             placeholder="Tvoje přezdívka"
             maxLength={20}
             autoFocus
-            className="w-full bg-white/5 border-2 border-white/10 rounded-2xl text-2xl text-white text-center placeholder-white/30 px-5 py-4 outline-none focus:border-brand-yellow font-semibold"
+            className="w-full bg-black/5 border-2 border-black/20 rounded-2xl text-2xl text-black text-center placeholder-black/30 px-5 py-4 outline-none focus:border-black font-semibold"
           />
           <button
             onClick={handleJoin}
             disabled={!socket || nickname.trim().length === 0}
-            className="w-full bg-brand-yellow text-black font-display font-black text-2xl uppercase tracking-wider py-4 rounded-2xl disabled:opacity-30 active:scale-[0.98] transition-transform"
+            className="w-full bg-black text-brand-yellow font-display font-black text-2xl uppercase tracking-wider py-4 rounded-2xl disabled:opacity-30 active:scale-[0.98] transition-transform"
           >
             Připojit se
           </button>
           {joinError && (
-            <div className="text-rose-400 text-center font-semibold mt-1">{joinError}</div>
+            <div className="text-rose-700 text-center font-semibold mt-1">{joinError}</div>
           )}
         </div>
       </main>
@@ -180,16 +180,16 @@ export default function PlayerPage() {
 
   if (phase === "lobby") {
     return (
-      <main className="min-h-svh flex flex-col items-center justify-center p-6 bg-black text-white">
-        <div className="text-brand-yellow font-display font-black text-xs tracking-[0.3em] uppercase">
+      <main className="min-h-svh flex flex-col items-center justify-center p-6 bg-brand-yellow text-black">
+        <div className="font-display font-black text-xs tracking-[0.3em] uppercase">
           Jsi ve hře
         </div>
         <div className="font-display font-black text-5xl mt-3 mb-10 text-balance text-center">
           {self?.nickname}
         </div>
-        <div className="w-16 h-16 rounded-full border-4 border-white/10 border-t-brand-yellow animate-spin mb-6" />
-        <div className="text-white/70 text-xl">Čekáme na start…</div>
-        <div className="mt-4 text-white/40 text-sm">
+        <div className="w-16 h-16 rounded-full border-4 border-black/10 border-t-black animate-spin mb-6" />
+        <div className="text-black/70 text-xl">Čekáme na start…</div>
+        <div className="mt-4 text-black/40 text-sm">
           {state?.players.length ?? 0}{" "}
           {pluralize(state?.players.length ?? 0, "hráč", "hráči", "hráčů")} v lobby
         </div>
@@ -201,26 +201,26 @@ export default function PlayerPage() {
     const opts = state.question.options;
     const locked = self?.hasAnsweredCurrent || selected !== null;
     return (
-      <main className="min-h-svh flex flex-col p-4 bg-black text-white">
+      <main className="min-h-svh flex flex-col p-4 bg-brand-yellow text-black">
         <div className="flex justify-between items-center mb-3 px-1">
-          <div className="text-brand-yellow font-display font-black uppercase tracking-widest text-xs">
+          <div className="font-display font-black uppercase tracking-widest text-xs">
             Otázka {state.question.index + 1}/{state.question.total}
           </div>
           <div
             className={`font-display font-black text-3xl tabular-nums ${
-              secondsLeft <= 3 ? "text-rose-400" : "text-brand-yellow"
+              secondsLeft <= 3 ? "text-rose-700" : "text-black"
             }`}
           >
             {secondsLeft}s
           </div>
         </div>
-        <div className="h-1.5 bg-white/10 rounded-full overflow-hidden mb-4">
+        <div className="h-1.5 bg-black/10 rounded-full overflow-hidden mb-4">
           <div
-            className="h-full bg-brand-yellow transition-all duration-200 ease-linear"
+            className="h-full bg-black transition-all duration-200 ease-linear"
             style={{ width: `${(secondsLeft / 10) * 100}%` }}
           />
         </div>
-        <div className="bg-brand-smoke border border-brand-line rounded-2xl p-5 mb-4">
+        <div className="bg-black text-white rounded-2xl p-5 mb-4">
           <div className="font-display font-bold text-lg leading-snug text-balance">
             {state.question.text}
           </div>
@@ -236,15 +236,15 @@ export default function PlayerPage() {
                 className={`group text-left rounded-2xl px-4 py-4 flex items-center gap-3 active:scale-[0.98] transition-all font-semibold text-base leading-snug
                   ${
                     isSelected
-                      ? "bg-brand-yellow text-black"
+                      ? "bg-black text-brand-yellow border-2 border-black"
                       : locked
-                      ? "bg-brand-smoke text-white/40 border-2 border-brand-line"
-                      : "bg-brand-smoke text-white border-2 border-brand-line hover:border-brand-yellow"
+                      ? "bg-black/5 text-black/40 border-2 border-black/10"
+                      : "bg-white text-black border-2 border-black/20 hover:border-black"
                   }`}
               >
                 <span
                   className={`shrink-0 w-10 h-10 rounded-xl flex items-center justify-center font-display font-black text-xl
-                    ${isSelected ? "bg-black text-brand-yellow" : "bg-brand-yellow text-black"}`}
+                    ${isSelected ? "bg-brand-yellow text-black" : "bg-black text-brand-yellow"}`}
                 >
                   {OPTION_LETTERS[i]}
                 </span>
@@ -254,7 +254,7 @@ export default function PlayerPage() {
           })}
         </div>
         {locked && (
-          <div className="mt-2 text-center text-white/50 text-sm">
+          <div className="mt-2 text-center text-black/60 text-sm">
             Odpověď odeslána · čekáme na ostatní…
           </div>
         )}
@@ -289,14 +289,12 @@ export default function PlayerPage() {
 
   if (phase === "leaderboard") {
     return (
-      <main className="min-h-svh flex flex-col items-center justify-center p-6 bg-black text-white">
-        <div className="text-brand-yellow font-display font-black uppercase tracking-[0.3em] text-xs">
+      <main className="min-h-svh flex flex-col items-center justify-center p-6 bg-brand-yellow text-black">
+        <div className="font-display font-black uppercase tracking-[0.3em] text-xs">
           Průběžný stav
         </div>
-        <div className="font-display font-black text-7xl my-4 text-brand-yellow">
-          {self?.score ?? 0}
-        </div>
-        <div className="text-white/60">bodů</div>
+        <div className="font-display font-black text-7xl my-4">{self?.score ?? 0}</div>
+        <div className="text-black/60">bodů</div>
         {myRank && (
           <div className="mt-8 text-xl">
             Pořadí: <span className="font-display font-black text-2xl">#{myRank}</span>
@@ -308,15 +306,16 @@ export default function PlayerPage() {
 
   if (phase === "ended") {
     return (
-      <main className="min-h-svh flex flex-col items-center justify-center p-6 bg-brand-yellow text-black">
+      <main className="min-h-svh flex flex-col items-center justify-center p-6 bg-black text-brand-yellow">
         <div className="font-display font-black uppercase tracking-[0.3em] text-xs">
           Konec hry
         </div>
         <div className="font-display font-black text-7xl my-4">{self?.score ?? 0}</div>
-        <div>finální skóre</div>
+        <div className="text-white">finální skóre</div>
         {myRank && (
-          <div className="mt-6 text-2xl">
-            Skončil/a jsi <span className="font-display font-black">#{myRank}</span>
+          <div className="mt-6 text-2xl text-white">
+            Skončil/a jsi{" "}
+            <span className="font-display font-black text-brand-yellow">#{myRank}</span>
           </div>
         )}
       </main>
