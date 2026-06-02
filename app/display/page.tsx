@@ -233,7 +233,7 @@ function QuestionView({
   secondsLeft: number;
 }) {
   const q = state.question!;
-  const pct = (secondsLeft / 20) * 100;
+  const pct = (secondsLeft / 15) * 100;
   return (
     <main className="min-h-svh p-4 pt-12 md:p-10 md:pt-20 bg-brand-yellow text-black flex flex-col relative">
       <BrandStripe />

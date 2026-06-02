@@ -10,7 +10,7 @@ import type {
   RevealPayload,
 } from "./types";
 
-export const QUESTION_DURATION_MS = 20_000;
+export const QUESTION_DURATION_MS = 15_000;
 export const REVEAL_DURATION_MS = 4_000;
 export const LEADERBOARD_DURATION_MS = 6_000;
 export const MAX_POINTS = 1000;
