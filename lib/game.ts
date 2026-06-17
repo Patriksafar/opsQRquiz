@@ -132,7 +132,6 @@ export class GameEngine {
     if (optionIndex < 0 || optionIndex >= question.options.length) return;
     const player = this.players.get(playerId);
     if (!player) return;
-    if (this.round.answers.has(playerId)) return;
 
     const now = Date.now();
     const elapsed = now - this.round.startedAt;
@@ -144,15 +143,16 @@ export class GameEngine {
       const speedRatio = 1 - elapsed / QUESTION_DURATION_MS;
       points = Math.round(MIN_POINTS_ON_CORRECT + (MAX_POINTS - MIN_POINTS_ON_CORRECT) * speedRatio);
     }
+
+    // Players may change their answer until the timer runs out. Replace any
+    // previous answer for this round and reconcile the running score. Points
+    // reflect the latest submission, so changing late costs the speed bonus.
+    const previous = this.round.answers.get(playerId);
+    if (previous) player.score -= previous.points;
     this.round.answers.set(playerId, { optionIndex, timeMs: elapsed, correct, points });
     player.score += points;
 
-    if (this.round.answers.size >= this.players.size) {
-      this.clearTimer();
-      this.enterReveal();
-    } else {
-      this.notify();
-    }
+    this.notify();
   }
 
   private advance() {
