@@ -263,8 +263,22 @@ export default function PlayerPage() {
   }
 
   if (phase === "reveal") {
-    const correct = self?.lastAnswerCorrect;
-    const points = self?.lastAnswerPoints ?? 0;
+    // `self` arrives as a separate event from `state`, so on the frame the phase
+    // flips to "reveal" it may still hold the previous question's result. Only
+    // trust it once its index matches the question actually being revealed —
+    // otherwise show a brief "evaluating" state instead of a stale result.
+    const revealIndex = state?.reveal?.index ?? state?.question?.index ?? null;
+    const selfReady = self != null && self.lastAnswerIndex === revealIndex;
+    if (!selfReady) {
+      return (
+        <main className="min-h-svh flex flex-col items-center justify-center p-6 bg-brand-yellow text-black">
+          <div className="w-16 h-16 rounded-full border-4 border-black/10 border-t-black animate-spin mb-6" />
+          <div className="text-black/70 text-xl">Vyhodnocujeme…</div>
+        </main>
+      );
+    }
+    const correct = self.lastAnswerCorrect;
+    const points = self.lastAnswerPoints ?? 0;
     return (
       <main
         className={`min-h-svh flex flex-col items-center justify-center p-6 ${

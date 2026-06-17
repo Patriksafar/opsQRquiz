@@ -57,6 +57,10 @@ export type PlayerSelfState = {
   score: number;
   lastAnswerCorrect: boolean | null;
   lastAnswerPoints: number | null;
+  // Index of the question the lastAnswer* fields describe. Lets the client
+  // detect a stale `self` payload (delivered as a separate event from `state`)
+  // and avoid showing the previous question's result on the reveal screen.
+  lastAnswerIndex: number | null;
   hasAnsweredCurrent: boolean;
 };
 

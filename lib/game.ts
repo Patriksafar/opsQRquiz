@@ -250,12 +250,14 @@ export class GameEngine {
     const player = this.players.get(id);
     if (!player) return null;
     const lastAnswer = this.round?.answers.get(id) ?? null;
+    const revealing = this.phase === "reveal" || this.phase === "leaderboard";
     return {
       id: player.id,
       nickname: player.nickname,
       score: player.score,
-      lastAnswerCorrect: this.phase === "reveal" || this.phase === "leaderboard" ? lastAnswer?.correct ?? false : null,
-      lastAnswerPoints: this.phase === "reveal" || this.phase === "leaderboard" ? lastAnswer?.points ?? 0 : null,
+      lastAnswerCorrect: revealing ? lastAnswer?.correct ?? false : null,
+      lastAnswerPoints: revealing ? lastAnswer?.points ?? 0 : null,
+      lastAnswerIndex: revealing ? this.currentIndex : null,
       hasAnsweredCurrent: this.phase === "question" && !!lastAnswer,
     };
   }
