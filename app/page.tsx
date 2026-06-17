@@ -263,22 +263,21 @@ export default function PlayerPage() {
   }
 
   if (phase === "reveal") {
-    // `self` arrives as a separate event from `state`, so on the frame the phase
-    // flips to "reveal" it may still hold the previous question's result. Only
-    // trust it once its index matches the question actually being revealed —
-    // otherwise show a brief "evaluating" state instead of a stale result.
-    const revealIndex = state?.reveal?.index ?? state?.question?.index ?? null;
+    // `state` and `self` arrive as two separate socket events. On a slow link
+    // (e.g. mobile data) the gap between them can be hundreds of ms, during
+    // which `self` still holds the PREVIOUS question's result. So don't render
+    // correctness from `self` until its index matches the question being
+    // revealed. Until then, derive it optimistically from data carried in the
+    // SAME event that flipped the phase: `state.reveal.correctIndex` vs the
+    // option this client picked (`selected`). `self` then becomes authoritative
+    // and also supplies the points once it catches up.
+    const reveal = state?.reveal;
+    const revealIndex = reveal?.index ?? state?.question?.index ?? null;
     const selfReady = self != null && self.lastAnswerIndex === revealIndex;
-    if (!selfReady) {
-      return (
-        <main className="min-h-svh flex flex-col items-center justify-center p-6 bg-brand-yellow text-black">
-          <div className="w-16 h-16 rounded-full border-4 border-black/10 border-t-black animate-spin mb-6" />
-          <div className="text-black/70 text-xl">Vyhodnocujeme…</div>
-        </main>
-      );
-    }
-    const correct = self.lastAnswerCorrect;
-    const points = self.lastAnswerPoints ?? 0;
+    const correct = selfReady
+      ? self.lastAnswerCorrect === true
+      : reveal != null && selected != null && selected === reveal.correctIndex;
+    const points = selfReady ? self.lastAnswerPoints ?? 0 : 0;
     return (
       <main
         className={`min-h-svh flex flex-col items-center justify-center p-6 ${
@@ -290,7 +289,11 @@ export default function PlayerPage() {
         </div>
         <div className="text-8xl font-black my-6">{correct ? "🎉" : "💥"}</div>
         {correct ? (
-          <div className="font-display font-black text-4xl">+{points} bodů</div>
+          selfReady ? (
+            <div className="font-display font-black text-4xl">+{points} bodů</div>
+          ) : (
+            <div className="text-xl opacity-70">Počítáme body…</div>
+          )
         ) : (
           <div className="text-xl opacity-70">Tentokrát bez bodů</div>
         )}
