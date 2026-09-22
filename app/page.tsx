@@ -134,23 +134,23 @@ export default function PlayerPage() {
   // Avoid flashing the join form while we wait for the rejoin probe to resolve.
   if (!bootstrapped) {
     return (
-      <main className="min-h-svh flex items-center justify-center bg-brand-yellow text-black">
-        <div className="w-10 h-10 rounded-full border-4 border-black/10 border-t-black animate-spin" />
+      <main className="min-h-svh flex items-center justify-center text-foreground">
+        <div className="w-10 h-10 rounded-full border-4 border-line-canvas border-t-brand animate-spin" />
       </main>
     );
   }
 
   if (!joined) {
     return (
-      <main className="min-h-svh flex flex-col bg-brand-yellow text-black px-6 pt-8 pb-6">
+      <main className="min-h-svh flex flex-col text-foreground px-6 pt-8 pb-6">
         <div>
           <div className="font-display font-black text-xs tracking-[0.3em] uppercase">
             US Launchpad
           </div>
           <h1 className="font-display font-black text-4xl uppercase leading-[0.95] mt-3 text-balance">
-            Pojď do <span className="bg-black text-brand-yellow px-2 inline-block">kvízu</span>
+            Pojď do <span className="bg-brand text-brand-foreground px-2 inline-block">kvízu</span>
           </h1>
-          <p className="mt-2 text-black/60 text-sm">Zadej přezdívku a počkej na start.</p>
+          <p className="mt-2 text-foreground-subtle text-sm">Zadej přezdívku a počkej na start.</p>
         </div>
         <div className="flex flex-col gap-3 pt-6">
           <input
@@ -161,17 +161,17 @@ export default function PlayerPage() {
             placeholder="Tvoje přezdívka"
             maxLength={20}
             autoFocus
-            className="w-full bg-black/5 border-2 border-black/20 rounded-2xl text-2xl text-black text-center placeholder-black/30 px-5 py-4 outline-none focus:border-black font-semibold"
+            className="w-full bg-card border-2 border-card-border rounded-2xl text-2xl text-card-foreground text-center placeholder-card-foreground-subtle/70 px-5 py-4 outline-none focus:border-brand font-semibold"
           />
           <button
             onClick={handleJoin}
             disabled={!socket || nickname.trim().length === 0}
-            className="w-full bg-black text-brand-yellow font-display font-black text-2xl uppercase tracking-wider py-4 rounded-2xl disabled:opacity-30 active:scale-[0.98] transition-transform"
+            className="w-full bg-brand text-brand-foreground font-display font-black text-2xl uppercase tracking-wider py-4 rounded-2xl disabled:opacity-30 active:scale-[0.98] transition-transform"
           >
             Připojit se
           </button>
           {joinError && (
-            <div className="text-rose-700 text-center font-semibold mt-1">{joinError}</div>
+            <div className="text-destructive text-center font-semibold mt-1">{joinError}</div>
           )}
         </div>
       </main>
@@ -182,16 +182,16 @@ export default function PlayerPage() {
 
   if (phase === "lobby") {
     return (
-      <main className="min-h-svh flex flex-col items-center justify-center p-6 bg-brand-yellow text-black">
-        <div className="font-display font-black text-xs tracking-[0.3em] uppercase">
+      <main className="min-h-svh flex flex-col items-center justify-center p-6 text-foreground">
+        <div className="font-display font-black text-xs tracking-[0.3em] uppercase text-brand">
           Jsi ve hře
         </div>
         <div className="font-display font-black text-5xl mt-3 mb-10 text-balance text-center">
           {self?.nickname}
         </div>
-        <div className="w-16 h-16 rounded-full border-4 border-black/10 border-t-black animate-spin mb-6" />
-        <div className="text-black/70 text-xl">Čekáme na start…</div>
-        <div className="mt-4 text-black/40 text-sm">
+        <div className="w-16 h-16 rounded-full border-4 border-line-canvas border-t-brand animate-spin mb-6" />
+        <div className="text-foreground-muted text-xl">Čekáme na start…</div>
+        <div className="mt-4 text-foreground-subtle text-sm">
           {state?.players.length ?? 0}{" "}
           {pluralize(state?.players.length ?? 0, "hráč", "hráči", "hráčů")} v lobby
         </div>
@@ -203,26 +203,26 @@ export default function PlayerPage() {
     const opts = state.question.options;
     const hasAnswered = selected !== null;
     return (
-      <main className="min-h-svh flex flex-col p-4 bg-brand-yellow text-black">
+      <main className="min-h-svh flex flex-col p-4 text-foreground">
         <div className="flex justify-between items-center mb-3 px-1">
           <div className="font-display font-black uppercase tracking-widest text-xs">
             Otázka {state.question.index + 1}/{state.question.total}
           </div>
           <div
             className={`font-display font-black text-3xl tabular-nums ${
-              secondsLeft <= 3 ? "text-rose-700" : "text-black"
+              secondsLeft <= 3 ? "text-destructive" : "text-foreground"
             }`}
           >
             {secondsLeft}s
           </div>
         </div>
-        <div className="h-1.5 bg-black/10 rounded-full overflow-hidden mb-4">
+        <div className="h-1.5 bg-muted rounded-full overflow-hidden mb-4">
           <div
-            className="h-full bg-black transition-all duration-200 ease-linear"
+            className="h-full bg-brand transition-all duration-200 ease-linear"
             style={{ width: `${(secondsLeft / 15) * 100}%` }}
           />
         </div>
-        <div className="bg-black text-white rounded-2xl p-5 mb-4">
+        <div className="bg-card text-card-foreground border border-card-border rounded-2xl p-5 mb-4">
           <div className="font-display font-bold text-lg leading-snug text-balance">
             {state.question.text}
           </div>
@@ -237,13 +237,13 @@ export default function PlayerPage() {
                 className={`group text-left rounded-2xl px-4 py-4 flex items-center gap-3 active:scale-[0.98] transition-all font-semibold text-base leading-snug
                   ${
                     isSelected
-                      ? "bg-black text-brand-yellow border-2 border-black"
-                      : "bg-white text-black border-2 border-black/20 hover:border-black"
+                      ? "bg-brand text-brand-foreground border-2 border-brand"
+                      : "bg-card text-card-foreground border-2 border-card-border hover:border-brand"
                   }`}
               >
                 <span
                   className={`shrink-0 w-10 h-10 rounded-xl flex items-center justify-center font-display font-black text-xl
-                    ${isSelected ? "bg-brand-yellow text-black" : "bg-black text-brand-yellow"}`}
+                    ${isSelected ? "bg-brand-foreground text-brand" : "bg-brand text-brand-foreground"}`}
                 >
                   {OPTION_LETTERS[i]}
                 </span>
@@ -253,7 +253,7 @@ export default function PlayerPage() {
           })}
         </div>
         {hasAnswered && (
-          <div className="mt-2 text-center text-black/60 text-sm">
+          <div className="mt-2 text-center text-foreground-subtle text-sm">
             Odpověď uložena · můžeš ji měnit, dokud běží čas.
           </div>
         )}
@@ -280,10 +280,14 @@ export default function PlayerPage() {
     return (
       <main
         className={`min-h-svh flex flex-col items-center justify-center p-6 ${
-          correct ? "bg-brand-yellow text-black" : "bg-black text-white"
+          correct ? "bg-brand text-brand-foreground" : "bg-canvas-bottom text-foreground"
         }`}
       >
-        <div className="font-display font-black uppercase tracking-[0.3em] text-xs">
+        <div
+          className={`font-display font-black uppercase tracking-[0.3em] text-xs ${
+            correct ? "" : "text-destructive"
+          }`}
+        >
           {correct ? "Správně!" : "Špatně"}
         </div>
         <div className="text-8xl font-black my-6">{correct ? "🎉" : "💥"}</div>
@@ -305,12 +309,14 @@ export default function PlayerPage() {
 
   if (phase === "leaderboard") {
     return (
-      <main className="min-h-svh flex flex-col items-center justify-center p-6 bg-brand-yellow text-black">
-        <div className="font-display font-black uppercase tracking-[0.3em] text-xs">
+      <main className="min-h-svh flex flex-col items-center justify-center p-6 text-foreground">
+        <div className="font-display font-black uppercase tracking-[0.3em] text-xs text-brand">
           Průběžný stav
         </div>
-        <div className="font-display font-black text-7xl my-4">{self?.score ?? 0}</div>
-        <div className="text-black/60">bodů</div>
+        <div className="font-display font-black text-7xl my-4 text-brand">
+          {self?.score ?? 0}
+        </div>
+        <div className="text-foreground-subtle">bodů</div>
         {myRank && (
           <div className="mt-8 text-xl">
             Pořadí: <span className="font-display font-black text-2xl">#{myRank}</span>
@@ -322,16 +328,18 @@ export default function PlayerPage() {
 
   if (phase === "ended") {
     return (
-      <main className="min-h-svh flex flex-col items-center justify-center p-6 bg-black text-brand-yellow">
-        <div className="font-display font-black uppercase tracking-[0.3em] text-xs">
+      <main className="min-h-svh flex flex-col items-center justify-center p-6 text-foreground">
+        <div className="font-display font-black uppercase tracking-[0.3em] text-xs text-brand">
           Konec hry
         </div>
-        <div className="font-display font-black text-7xl my-4">{self?.score ?? 0}</div>
-        <div className="text-white">finální skóre</div>
+        <div className="font-display font-black text-7xl my-4 text-brand">
+          {self?.score ?? 0}
+        </div>
+        <div className="text-foreground-muted">finální skóre</div>
         {myRank && (
-          <div className="mt-6 text-2xl text-white">
+          <div className="mt-6 text-2xl text-foreground-muted">
             Skončil/a jsi{" "}
-            <span className="font-display font-black text-brand-yellow">#{myRank}</span>
+            <span className="font-display font-black text-brand">#{myRank}</span>
           </div>
         )}
       </main>
