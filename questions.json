@@ -31,7 +31,7 @@
     "options": [
       "V případě, že se na pracovišti vyskytují současně min. 3 zaměstnanci, v prostorách s vyšším požárním nebezpečím",
       "V případě, kdy máme prvního zaměstnance a máme vlastní prostory",
-      "V případě, že má firma nejméně 20 zaměstnanců a pouze v budovách s vysokým požárním nebezpečím."
+      "V případě, že má firma nejméně 20 zaměstnanců a pouze v budovách s vysokým požárním nebezpečím"
     ],
     "correctIndex": 0
   },
@@ -47,7 +47,7 @@
   {
     "text": "Kdy nejpozději nastupuje těhotná zaměstnankyně na mateřskou dovolenou?",
     "options": [
-      "Nejpozději 4 týdne před plánovaným termínem porodu",
+      "Nejpozději 4 týdny před plánovaným termínem porodu",
       "Dokončí směnu a zhasne",
       "Nejpozději 6 týdnů před plánovaným termínem porodu"
     ],
