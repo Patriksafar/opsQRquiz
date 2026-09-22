@@ -52,7 +52,7 @@ export default function AdminPage() {
     <main className="min-h-svh p-4 md:p-8 text-foreground">
       <div className="max-w-3xl mx-auto">
         <div className="font-display font-black text-xs tracking-[0.3em] uppercase">
-          Operations Hub · Admin
+          US Launchpad · Admin
         </div>
         <h1 className="font-display font-black text-4xl md:text-5xl uppercase mt-3 mb-1">
           Ovládání kvízu

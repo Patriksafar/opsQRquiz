@@ -73,7 +73,7 @@ export default function DisplayPage() {
 function BrandStripe() {
   return (
     <div className="absolute top-0 left-0 right-0 bg-brand text-brand-foreground px-4 py-2 md:px-10 md:py-3 flex items-center justify-between text-[10px] md:text-sm font-display font-black uppercase tracking-[0.25em] md:tracking-[0.3em] z-20">
-      <span>Operations Hub</span>
+      <span>US Launchpad</span>
       <span>Live Quiz</span>
     </div>
   );
