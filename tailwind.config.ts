@@ -5,14 +5,50 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        brand: {
-          yellow: "#ffed00",
-          "yellow-soft": "#fff46a",
-          black: "#000000",
-          ink: "#0a0a0a",
-          smoke: "#1a1a1a",
-          line: "#262626",
+        // Operations Checkpoint palette. Each token is `hsl(<channels> / alpha)`
+        // so Tailwind's `/50` opacity modifiers keep working.
+        canvas: {
+          top: "hsl(var(--canvas-top) / <alpha-value>)",
+          bottom: "hsl(var(--canvas-bottom) / <alpha-value>)",
         },
+        background: "hsl(var(--background) / <alpha-value>)",
+        foreground: {
+          DEFAULT: "hsl(var(--foreground) / <alpha-value>)",
+          muted: "hsl(var(--foreground-muted) / <alpha-value>)",
+          subtle: "hsl(var(--foreground-subtle) / <alpha-value>)",
+        },
+        card: {
+          DEFAULT: "hsl(var(--card) / <alpha-value>)",
+          elevated: "hsl(var(--card-elevated) / <alpha-value>)",
+          border: "hsl(var(--card-border) / <alpha-value>)",
+          foreground: "hsl(var(--card-foreground) / <alpha-value>)",
+          "foreground-muted": "hsl(var(--card-foreground-muted) / <alpha-value>)",
+          "foreground-subtle": "hsl(var(--card-foreground-subtle) / <alpha-value>)",
+        },
+        brand: {
+          DEFAULT: "hsl(var(--brand) / <alpha-value>)",
+          hover: "hsl(var(--brand-hover) / <alpha-value>)",
+          foreground: "hsl(var(--brand-foreground) / <alpha-value>)",
+        },
+        muted: {
+          DEFAULT: "hsl(var(--muted) / <alpha-value>)",
+          foreground: "hsl(var(--muted-foreground) / <alpha-value>)",
+        },
+        secondary: {
+          DEFAULT: "hsl(var(--secondary) / <alpha-value>)",
+          foreground: "hsl(var(--secondary-foreground) / <alpha-value>)",
+        },
+        line: {
+          DEFAULT: "hsl(var(--border) / <alpha-value>)",
+          canvas: "hsl(var(--border-on-canvas) / <alpha-value>)",
+        },
+        success: "hsl(var(--success) / <alpha-value>)",
+        warning: "hsl(var(--warning) / <alpha-value>)",
+        destructive: {
+          DEFAULT: "hsl(var(--destructive) / <alpha-value>)",
+          foreground: "hsl(var(--destructive-foreground) / <alpha-value>)",
+        },
+        info: "hsl(var(--info) / <alpha-value>)",
       },
       fontFamily: {
         sans: ["var(--font-montserrat)", "ui-sans-serif", "system-ui", "sans-serif"],

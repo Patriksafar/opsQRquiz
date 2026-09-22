@@ -2,11 +2,66 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Palette lifted from operations-checkpoint.operationshub.cz — the plum canvas,
+   cream text and yellow signature of Operations Checkpoint. Values are kept as
+   raw HSL channels so Tailwind can apply opacity modifiers to them. */
+:root {
+  --canvas-top: 297 26% 17%;
+  --canvas-bottom: 300 30% 10%;
+  --background: 297 26% 14%;
+
+  --foreground: 42 39% 94%;
+  --foreground-muted: 40 20% 78%;
+  --foreground-subtle: 36 13% 60%;
+
+  --card: 324 32% 26%;
+  --card-elevated: 324 30% 32%;
+  --card-foreground: 42 39% 94%;
+  --card-foreground-muted: 40 22% 80%;
+  --card-foreground-subtle: 36 16% 71%;
+  --card-border: 324 26% 38%;
+
+  --brand: 56 100% 50%;
+  --brand-hover: 56 100% 62%;
+  --brand-foreground: 297 30% 11%;
+
+  --muted: 324 24% 20%;
+  --muted-foreground: 38 16% 70%;
+  --secondary: 324 28% 33%;
+  --secondary-foreground: 42 39% 94%;
+
+  --border: 324 26% 38%;
+  --border-on-canvas: 300 18% 30%;
+
+  --success: 152 60% 52%;
+  --warning: 40 95% 60%;
+  --destructive: 4 84% 74%;
+  --destructive-foreground: 297 30% 11%;
+  --info: 205 82% 64%;
+}
+
 html,
 body {
   height: 100%;
-  background: #ffed00;
-  color: #000000;
+}
+
+/* Fixed plum gradient plus the same fine grain the reference site lays over it,
+   so long scrolling screens (leaderboard) don't band. */
+html {
+  background-color: hsl(var(--background));
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.045'/%3E%3C/svg%3E"),
+    linear-gradient(180deg, hsl(var(--canvas-top)) 0%, hsl(var(--canvas-bottom)) 100%);
+  background-repeat: repeat, no-repeat;
+  background-size: 180px 180px, 100% 100%;
+  background-attachment: fixed;
+  color: hsl(var(--foreground));
+}
+
+body {
+  background: transparent;
+  color: hsl(var(--foreground));
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 * {

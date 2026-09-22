@@ -24,8 +24,8 @@ export default function AdminPage() {
 
   if (authed === false) {
     return (
-      <main className="min-h-svh flex items-center justify-center bg-brand-yellow text-black">
-        <div className="text-2xl text-rose-800 font-display font-black uppercase tracking-widest">
+      <main className="min-h-svh flex items-center justify-center text-foreground">
+        <div className="text-2xl text-destructive font-display font-black uppercase tracking-widest">
           Neplatná admin URL
         </div>
       </main>
@@ -34,8 +34,8 @@ export default function AdminPage() {
 
   if (!state || authed === null) {
     return (
-      <main className="min-h-svh flex items-center justify-center bg-brand-yellow text-black">
-        <div className="text-black/60">Připojuji…</div>
+      <main className="min-h-svh flex items-center justify-center text-foreground">
+        <div className="text-foreground-subtle">Připojuji…</div>
       </main>
     );
   }
@@ -49,7 +49,7 @@ export default function AdminPage() {
   };
 
   return (
-    <main className="min-h-svh p-4 md:p-8 bg-brand-yellow text-black">
+    <main className="min-h-svh p-4 md:p-8 text-foreground">
       <div className="max-w-3xl mx-auto">
         <div className="font-display font-black text-xs tracking-[0.3em] uppercase">
           US Launchpad · Admin
@@ -57,7 +57,7 @@ export default function AdminPage() {
         <h1 className="font-display font-black text-4xl md:text-5xl uppercase mt-3 mb-1">
           Ovládání kvízu
         </h1>
-        <p className="text-black/60 mb-8">Spusť hru, přeskoč fázi, restartuj.</p>
+        <p className="text-foreground-subtle mb-8">Spusť hru, přeskoč fázi, restartuj.</p>
 
         <div className="grid grid-cols-2 gap-4 mb-8">
           <Stat label="Fáze" value={phaseLabel(state.phase)} />
@@ -81,7 +81,7 @@ export default function AdminPage() {
             <button
               onClick={start}
               disabled={state.players.length === 0}
-              className="px-6 py-4 rounded-2xl bg-black text-brand-yellow font-display font-black text-xl uppercase tracking-wider disabled:opacity-30 active:scale-[0.98] transition-transform"
+              className="px-6 py-4 rounded-2xl bg-brand hover:bg-brand-hover text-brand-foreground font-display font-black text-xl uppercase tracking-wider disabled:opacity-30 active:scale-[0.98] transition-transform"
             >
               Spustit hru
             </button>
@@ -89,35 +89,37 @@ export default function AdminPage() {
           {state.phase !== "lobby" && state.phase !== "ended" && (
             <button
               onClick={next}
-              className="px-6 py-4 rounded-2xl bg-white text-black border-2 border-black font-display font-black text-xl uppercase tracking-wider active:scale-[0.98] transition-transform"
+              className="px-6 py-4 rounded-2xl bg-card text-card-foreground border-2 border-card-border hover:border-brand font-display font-black text-xl uppercase tracking-wider active:scale-[0.98] transition-transform"
             >
               Přeskočit
             </button>
           )}
           <button
             onClick={reset}
-            className="px-6 py-4 rounded-2xl bg-transparent border-2 border-rose-800 text-rose-800 hover:bg-rose-800 hover:text-brand-yellow font-display font-black text-xl uppercase tracking-wider transition-colors ml-auto"
+            className="px-6 py-4 rounded-2xl bg-transparent border-2 border-destructive text-destructive hover:bg-destructive hover:text-destructive-foreground font-display font-black text-xl uppercase tracking-wider transition-colors ml-auto"
           >
             Restart
           </button>
         </div>
 
         <div>
-          <h2 className="font-display font-black text-sm uppercase tracking-widest text-black/60 mb-3">
+          <h2 className="font-display font-black text-sm uppercase tracking-widest text-foreground-subtle mb-3">
             Hráči ({state.players.length})
           </h2>
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
             {state.players.map((p) => (
               <div
                 key={p.id}
-                className="bg-black text-brand-yellow rounded-xl px-4 py-3 flex justify-between items-center"
+                className="bg-card text-card-foreground border border-card-border rounded-xl px-4 py-3 flex justify-between items-center"
               >
                 <span className="font-semibold">{p.nickname}</span>
-                <span className="font-display font-black tabular-nums">{p.score}</span>
+                <span className="font-display font-black tabular-nums text-brand">
+                  {p.score}
+                </span>
               </div>
             ))}
             {state.players.length === 0 && (
-              <div className="text-black/40 col-span-full">Zatím žádní hráči.</div>
+              <div className="text-foreground-subtle col-span-full">Zatím žádní hráči.</div>
             )}
           </div>
         </div>
@@ -128,11 +130,11 @@ export default function AdminPage() {
 
 function Stat({ label, value }: { label: string; value: string }) {
   return (
-    <div className="bg-black text-brand-yellow rounded-2xl p-4">
-      <div className="text-brand-yellow/70 text-xs uppercase tracking-widest font-display font-black">
+    <div className="bg-card text-card-foreground border border-card-border rounded-2xl p-4">
+      <div className="text-card-foreground-subtle text-xs uppercase tracking-widest font-display font-black">
         {label}
       </div>
-      <div className="text-2xl font-display font-black mt-1">{value}</div>
+      <div className="text-2xl font-display font-black mt-1 text-brand">{value}</div>
     </div>
   );
 }

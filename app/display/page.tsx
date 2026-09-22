@@ -18,12 +18,13 @@ export default function DisplayPage() {
     if (typeof window !== "undefined") {
       const url = `${window.location.protocol}//${window.location.host}/`;
       setJoinUrl(url);
-      // Yellow QR drawn on a black card — high contrast against the yellow page.
+      // Yellow QR on the deep plum panel it sits on — the strongest contrast
+      // pair in the palette (--brand on --brand-foreground).
       QRCode.toString(url, {
         type: "svg",
         margin: 1,
         width: 480,
-        color: { dark: "#ffed00", light: "#000000" },
+        color: { dark: "#FFEE00", light: "#241424" },
       })
         .then(setQrSvg)
         .catch(() => {});
@@ -71,7 +72,7 @@ export default function DisplayPage() {
 
 function BrandStripe() {
   return (
-    <div className="absolute top-0 left-0 right-0 bg-black text-brand-yellow px-4 py-2 md:px-10 md:py-3 flex items-center justify-between text-[10px] md:text-sm font-display font-black uppercase tracking-[0.25em] md:tracking-[0.3em] z-20">
+    <div className="absolute top-0 left-0 right-0 bg-brand text-brand-foreground px-4 py-2 md:px-10 md:py-3 flex items-center justify-between text-[10px] md:text-sm font-display font-black uppercase tracking-[0.25em] md:tracking-[0.3em] z-20">
       <span>US Launchpad</span>
       <span>Live Quiz</span>
     </div>
@@ -89,7 +90,7 @@ function Lobby({
 }) {
   const players = state?.players ?? [];
   return (
-    <main className="min-h-svh bg-brand-yellow text-black overflow-hidden relative flex flex-col">
+    <main className="min-h-svh text-foreground overflow-hidden relative flex flex-col">
       <BrandStripe />
 
       {/* Content: stacked on mobile, 3-col grid on md+ */}
@@ -101,30 +102,30 @@ function Lobby({
           </div>
           <div className="font-display font-black text-4xl md:text-6xl uppercase leading-[0.95] md:leading-[0.9] mt-1 md:mt-2">
             do{" "}
-            <span className="inline-block bg-black text-brand-yellow px-3 md:px-4 align-middle">
+            <span className="inline-block bg-brand text-brand-foreground px-3 md:px-4 align-middle">
               kvízu
             </span>
           </div>
-          <div className="text-black/70 mt-3 md:mt-5 text-sm md:text-lg max-w-sm mx-auto md:mx-0">
+          <div className="text-foreground-muted mt-3 md:mt-5 text-sm md:text-lg max-w-sm mx-auto md:mx-0">
             Naskenuj QR kód mobilem a&nbsp;zadej přezdívku.
           </div>
         </div>
 
         {/* QR — black card with yellow QR pixels */}
         <div className="flex justify-center">
-          <div className="bg-black rounded-3xl p-3 md:p-5 shadow-2xl border-4 border-black">
+          <div className="bg-brand-foreground rounded-3xl p-3 md:p-5 shadow-2xl border-4 border-card-border">
             {qrSvg ? (
               <div
                 className="w-[230px] h-[230px] md:w-[360px] md:h-[360px] [&>svg]:w-full [&>svg]:h-full [&>svg]:block"
                 dangerouslySetInnerHTML={{ __html: qrSvg }}
               />
             ) : (
-              <div className="w-[230px] h-[230px] md:w-[360px] md:h-[360px] bg-brand-yellow/10 animate-pulse rounded-2xl" />
+              <div className="w-[230px] h-[230px] md:w-[360px] md:h-[360px] bg-brand/10 animate-pulse rounded-2xl" />
             )}
-            <div className="mt-2 md:mt-3 text-center text-brand-yellow font-display font-black text-sm md:text-lg break-all">
+            <div className="mt-2 md:mt-3 text-center text-brand font-display font-black text-sm md:text-lg break-all">
               {joinUrl.replace(/^https?:\/\//, "").replace(/\/$/, "")}
             </div>
-            <div className="text-center text-brand-yellow/70 font-semibold uppercase text-[9px] md:text-[10px] tracking-widest mt-0.5">
+            <div className="text-center text-brand/70 font-semibold uppercase text-[9px] md:text-[10px] tracking-widest mt-0.5">
               Sken pro připojení
             </div>
           </div>
@@ -132,7 +133,7 @@ function Lobby({
 
         {/* Counter */}
         <div className="text-center md:text-right z-10">
-          <div className="text-black/50 text-xs md:text-sm uppercase tracking-widest font-display font-black">
+          <div className="text-foreground-subtle text-xs md:text-sm uppercase tracking-widest font-display font-black">
             Hráčů
           </div>
           <div className="font-display font-black text-5xl md:text-7xl tabular-nums leading-none">
@@ -163,8 +164,8 @@ function Lobby({
                   className={`px-3 py-1.5 rounded-xl font-display font-black text-sm uppercase shadow-lg whitespace-nowrap
                     ${
                       variant
-                        ? "bg-black text-brand-yellow"
-                        : "bg-white text-black border-2 border-black"
+                        ? "bg-brand text-brand-foreground"
+                        : "bg-card text-card-foreground border-2 border-card-border"
                     }`}
                 >
                   {p.nickname}
@@ -203,8 +204,8 @@ function FloatingName({
           className={`px-5 py-2.5 rounded-2xl font-display font-black text-2xl uppercase shadow-2xl whitespace-nowrap
             ${
               variant
-                ? "bg-black text-brand-yellow"
-                : "bg-white text-black border-4 border-black"
+                ? "bg-brand text-brand-foreground"
+                : "bg-card text-card-foreground border-4 border-card-border"
             }`}
         >
           {name}
@@ -235,7 +236,7 @@ function QuestionView({
   const q = state.question!;
   const pct = (secondsLeft / 15) * 100;
   return (
-    <main className="min-h-svh p-4 pt-12 md:p-10 md:pt-20 bg-brand-yellow text-black flex flex-col relative">
+    <main className="min-h-svh p-4 pt-12 md:p-10 md:pt-20 text-foreground flex flex-col relative">
       <BrandStripe />
       <div className="flex justify-between items-center mb-3 md:mb-6 mt-2 md:mt-4">
         <div className="font-display font-black uppercase tracking-widest text-xs md:text-xl">
@@ -243,19 +244,19 @@ function QuestionView({
         </div>
         <div
           className={`font-display font-black text-6xl md:text-[9rem] leading-none tabular-nums ${
-            secondsLeft <= 3 ? "text-rose-700" : "text-black"
+            secondsLeft <= 3 ? "text-destructive" : "text-foreground"
           }`}
         >
           {secondsLeft}
         </div>
       </div>
-      <div className="h-2 md:h-3 bg-black/10 rounded-full overflow-hidden mb-4 md:mb-8">
+      <div className="h-2 md:h-3 bg-muted rounded-full overflow-hidden mb-4 md:mb-8">
         <div
-          className="h-full bg-black transition-all duration-200 ease-linear"
+          className="h-full bg-brand transition-all duration-200 ease-linear"
           style={{ width: `${pct}%` }}
         />
       </div>
-      <div className="bg-black text-brand-yellow rounded-2xl md:rounded-3xl p-5 md:p-12 mb-4 md:mb-8 text-center">
+      <div className="bg-card text-card-foreground border border-card-border rounded-2xl md:rounded-3xl p-5 md:p-12 mb-4 md:mb-8 text-center">
         <div className="font-display font-black text-xl md:text-5xl leading-tight md:leading-tight text-balance">
           {q.text}
         </div>
@@ -264,12 +265,12 @@ function QuestionView({
         {q.options.map((opt, i) => (
           <div
             key={i}
-            className="bg-white border-2 border-black rounded-xl md:rounded-2xl flex items-center gap-3 md:gap-6 p-3 md:p-6"
+            className="bg-card border-2 border-card-border rounded-xl md:rounded-2xl flex items-center gap-3 md:gap-6 p-3 md:p-6"
           >
-            <div className="shrink-0 w-10 h-10 md:w-16 md:h-16 rounded-lg md:rounded-xl bg-black text-brand-yellow font-display font-black text-lg md:text-3xl flex items-center justify-center">
+            <div className="shrink-0 w-10 h-10 md:w-16 md:h-16 rounded-lg md:rounded-xl bg-brand text-brand-foreground font-display font-black text-lg md:text-3xl flex items-center justify-center">
               {OPTION_LETTERS[i]}
             </div>
-            <div className="text-base md:text-3xl font-semibold flex-1 leading-snug text-black">
+            <div className="text-base md:text-3xl font-semibold flex-1 leading-snug text-card-foreground">
               {opt}
             </div>
           </div>
@@ -284,7 +285,7 @@ function RevealView({ state }: { state: PublicState }) {
   const q = state.question!;
   const total = reveal.perOption.reduce((a, b) => a + b, 0) || 1;
   return (
-    <main className="min-h-svh p-4 pt-12 md:p-10 md:pt-20 bg-brand-yellow text-black flex flex-col relative">
+    <main className="min-h-svh p-4 pt-12 md:p-10 md:pt-20 text-foreground flex flex-col relative">
       <BrandStripe />
       <div className="font-display font-black text-2xl md:text-5xl uppercase text-center mb-4 md:mb-8 mt-2">
         Správná odpověď
@@ -300,8 +301,8 @@ function RevealView({ state }: { state: PublicState }) {
               className={`rounded-xl md:rounded-2xl flex flex-col p-3 md:p-6 transition-all border-2
                 ${
                   isCorrect
-                    ? "bg-black text-brand-yellow border-black ring-2 md:ring-4 ring-black scale-[1.02]"
-                    : "bg-white/40 text-black/40 border-black/10"
+                    ? "bg-brand text-brand-foreground border-brand ring-2 md:ring-4 ring-brand/40 scale-[1.02]"
+                    : "bg-card/50 text-card-foreground-subtle border-card-border/50"
                 }`}
             >
               <div className="flex items-center gap-3 md:gap-6 mb-2 md:mb-3">
@@ -309,15 +310,15 @@ function RevealView({ state }: { state: PublicState }) {
                   className={`shrink-0 w-10 h-10 md:w-16 md:h-16 rounded-lg md:rounded-xl font-display font-black text-lg md:text-3xl flex items-center justify-center
                     ${
                       isCorrect
-                        ? "bg-brand-yellow text-black"
-                        : "bg-black/10 text-black/40"
+                        ? "bg-brand-foreground text-brand"
+                        : "bg-muted text-card-foreground-subtle"
                     }`}
                 >
                   {OPTION_LETTERS[i]}
                 </div>
                 <div
                   className={`text-base md:text-3xl font-semibold flex-1 leading-snug ${
-                    isCorrect ? "text-brand-yellow" : ""
+                    isCorrect ? "text-brand-foreground" : ""
                   }`}
                 >
                   {opt}
@@ -327,17 +328,17 @@ function RevealView({ state }: { state: PublicState }) {
               <div className="mt-auto">
                 <div
                   className={`h-2 md:h-3 rounded-full overflow-hidden ${
-                    isCorrect ? "bg-brand-yellow/20" : "bg-black/10"
+                    isCorrect ? "bg-brand-foreground/20" : "bg-muted"
                   }`}
                 >
                   <div
-                    className={`h-full ${isCorrect ? "bg-brand-yellow" : "bg-black/30"}`}
+                    className={`h-full ${isCorrect ? "bg-brand-foreground" : "bg-card-foreground-subtle/40"}`}
                     style={{ width: `${pct}%` }}
                   />
                 </div>
                 <div
                   className={`mt-1 md:mt-2 text-xs md:text-base font-semibold ${
-                    isCorrect ? "text-brand-yellow/80" : "text-black/40"
+                    isCorrect ? "text-brand-foreground/80" : "text-card-foreground-subtle"
                   }`}
                 >
                   {count} {pluralize(count, "odpověď", "odpovědi", "odpovědí")}
@@ -363,7 +364,7 @@ function Leaderboard({
   const top = state.leaderboard;
   const winner = final && top.length > 0 ? top[0] : null;
   return (
-    <main className="min-h-svh p-4 pt-12 md:p-10 md:pt-20 bg-brand-yellow text-black flex flex-col relative">
+    <main className="min-h-svh p-4 pt-12 md:p-10 md:pt-20 text-foreground flex flex-col relative">
       <BrandStripe />
       <div className="text-center mb-4 md:mb-8 mt-2">
         <div className="font-display font-black text-3xl md:text-6xl uppercase">
@@ -372,7 +373,7 @@ function Leaderboard({
         {winner && (
           <div className="mt-3 md:mt-6 text-base md:text-3xl">
             🏆 Vítěz:{" "}
-            <span className="font-display font-black bg-black text-brand-yellow px-2 md:px-3 py-0.5 md:py-1 inline-block">
+            <span className="font-display font-black bg-brand text-brand-foreground px-2 md:px-3 py-0.5 md:py-1 inline-block">
               {winner.nickname}
             </span>{" "}
             · {winner.score} bodů
@@ -396,10 +397,10 @@ function Leaderboard({
               className={`flex items-center gap-3 md:gap-6 p-3 md:p-5 rounded-xl md:rounded-2xl shadow-lg border-2
                 ${
                   entry.rank === 1
-                    ? "bg-black text-brand-yellow border-black scale-[1.03] md:scale-[1.05] text-lg md:text-4xl"
+                    ? "bg-brand text-brand-foreground border-brand scale-[1.03] md:scale-[1.05] text-lg md:text-4xl"
                     : isTop3
-                    ? "bg-white text-black border-black scale-[1.01] md:scale-[1.02] text-base md:text-3xl"
-                    : "bg-white/50 text-black border-black/20 text-sm md:text-xl"
+                    ? "bg-card-elevated text-card-foreground border-card-border scale-[1.01] md:scale-[1.02] text-base md:text-3xl"
+                    : "bg-card/60 text-card-foreground-muted border-card-border/50 text-sm md:text-xl"
                 }`}
             >
               <div
@@ -417,7 +418,7 @@ function Leaderboard({
           );
         })}
         {top.length === 0 && (
-          <div className="text-center text-black/40 text-base md:text-xl">
+          <div className="text-center text-foreground-subtle text-base md:text-xl">
             Zatím žádní hráči.
           </div>
         )}
