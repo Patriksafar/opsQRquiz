@@ -5,6 +5,15 @@ import type { SoloQuestion } from "@/lib/solo";
 
 const OPTION_LETTERS = ["A", "B", "C", "D", "E", "F"];
 
+/** m:ss — reads like a stopwatch, and stays compact next to the score. */
+function formatDuration(ms: number | null): string {
+  if (ms === null) return "—";
+  const totalSeconds = Math.round(ms / 1000);
+  const minutes = Math.floor(totalSeconds / 60);
+  const seconds = totalSeconds % 60;
+  return `${minutes}:${String(seconds).padStart(2, "0")}`;
+}
+
 type Stage = "email" | "quiz" | "done";
 
 export default function SoloQuiz({ questions }: { questions: SoloQuestion[] }) {
@@ -16,11 +25,16 @@ export default function SoloQuiz({ questions }: { questions: SoloQuestion[] }) {
   const [error, setError] = useState<string | null>(null);
 
   const [participantId, setParticipantId] = useState<string | null>(null);
+  // Fallback only. The authoritative time is measured on the server between
+  // /start and /finish — that is the one that decides the top three.
+  const [startedAt, setStartedAt] = useState<number | null>(null);
   const [index, setIndex] = useState(0);
   const [answers, setAnswers] = useState<(number | null)[]>(() =>
     questions.map(() => null),
   );
-  const [result, setResult] = useState<{ score: number; total: number } | null>(null);
+  const [result, setResult] = useState<
+    { score: number; total: number; durationMs: number | null } | null
+  >(null);
 
   const handleStart = async () => {
     setError(null);
@@ -38,6 +52,7 @@ export default function SoloQuiz({ questions }: { questions: SoloQuestion[] }) {
       }
       setParticipantId(data.participantId);
       // The quiz begins the moment the email is stored — no extra tap.
+      setStartedAt(Date.now());
       setStage("quiz");
     } catch {
       setError("Nepodařilo se spojit se serverem. Zkontroluj připojení.");
@@ -60,6 +75,7 @@ export default function SoloQuiz({ questions }: { questions: SoloQuestion[] }) {
       return;
     }
     setSubmitting(true);
+    const elapsed = startedAt === null ? null : Date.now() - startedAt;
     try {
       const res = await fetch("/api/solo/finish", {
         method: "POST",
@@ -69,9 +85,13 @@ export default function SoloQuiz({ questions }: { questions: SoloQuestion[] }) {
       const data = await res.json();
       // Grading is server-side; if it somehow fails we still close the loop
       // rather than trapping someone on the last question.
-      setResult(res.ok ? data : { score: 0, total: questions.length });
+      setResult(
+        res.ok
+          ? { ...data, durationMs: data.durationMs ?? elapsed }
+          : { score: 0, total: questions.length, durationMs: elapsed },
+      );
     } catch {
-      setResult({ score: 0, total: questions.length });
+      setResult({ score: 0, total: questions.length, durationMs: elapsed });
     } finally {
       setSubmitting(false);
       setStage("done");
@@ -230,19 +250,33 @@ export default function SoloQuiz({ questions }: { questions: SoloQuestion[] }) {
       </h1>
 
       {result && (
-        <div className="mt-8 bg-card border border-card-border rounded-2xl px-8 py-6">
-          <div className="text-card-foreground-subtle text-xs uppercase tracking-widest font-display font-black">
-            Tvůj výsledek
+        <div className="mt-8 flex gap-3">
+          <div className="bg-card border border-card-border rounded-2xl px-7 py-6 min-w-[9rem]">
+            <div className="text-card-foreground-subtle text-xs uppercase tracking-widest font-display font-black">
+              Skóre
+            </div>
+            <div className="font-display font-black text-5xl text-brand mt-2 tabular-nums">
+              {result.score}/{result.total}
+            </div>
           </div>
-          <div className="font-display font-black text-6xl text-brand mt-2 tabular-nums">
-            {result.score}/{result.total}
+          <div className="bg-card border border-card-border rounded-2xl px-7 py-6 min-w-[9rem]">
+            <div className="text-card-foreground-subtle text-xs uppercase tracking-widest font-display font-black">
+              Čas
+            </div>
+            <div className="font-display font-black text-5xl text-brand mt-2 tabular-nums">
+              {formatDuration(result.durationMs)}
+            </div>
           </div>
         </div>
       )}
 
       <p className="mt-8 text-foreground-muted max-w-sm text-balance">
-        Odměnu a další informace ti pošleme na{" "}
-        <span className="font-semibold text-foreground">{email}</span>.
+        Odměnu získají <span className="font-semibold text-foreground">tři nejlepší</span>{" "}
+        — rozhoduje počet bodů, při shodě kratší čas.
+      </p>
+      <p className="mt-2 text-foreground-subtle text-sm max-w-sm text-balance">
+        Výsledky a další informace ti pošleme na{" "}
+        <span className="font-semibold text-foreground-muted">{email}</span>.
       </p>
     </main>
   );

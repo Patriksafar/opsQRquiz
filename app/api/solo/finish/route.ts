@@ -36,13 +36,17 @@ export async function POST(req: Request) {
 
   const { score, total } = grade(answers, questions);
 
+  // Timed on the server from when /start stamped started_at, since this
+  // decides the top three. If the write fails we still return the score and
+  // let the client fall back to its own stopwatch for the display.
+  let durationMs: number | null = null;
   if (typeof participantId === "string" && participantId.length > 0) {
     try {
-      await recordResult(participantId, score, total, answers);
+      ({ durationMs } = await recordResult(participantId, score, total, answers));
     } catch (err) {
       console.error("[solo] failed to record result:", err);
     }
   }
 
-  return NextResponse.json({ score, total });
+  return NextResponse.json({ score, total, durationMs });
 }
