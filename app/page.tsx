@@ -145,7 +145,7 @@ export default function PlayerPage() {
       <main className="min-h-svh flex flex-col text-foreground px-6 pt-8 pb-6">
         <div>
           <div className="font-display font-black text-xs tracking-[0.3em] uppercase">
-            US Launchpad
+            Operations Hub
           </div>
           <h1 className="font-display font-black text-4xl uppercase leading-[0.95] mt-3 text-balance">
             Pojď do <span className="bg-brand text-brand-foreground px-2 inline-block">kvízu</span>

@@ -7,7 +7,7 @@ import SoloQuiz from "./solo-quiz";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "Kvíz · US Launchpad",
+  title: "Kvíz · Operations Hub",
   description: "Vyplň kvíz a získej odměnu.",
 };
 

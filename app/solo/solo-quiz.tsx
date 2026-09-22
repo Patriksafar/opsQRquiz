@@ -83,7 +83,7 @@ export default function SoloQuiz({ questions }: { questions: SoloQuestion[] }) {
       <main className="min-h-svh flex flex-col justify-center text-foreground px-6 py-10">
         <div className="w-full max-w-md mx-auto">
           <div className="font-display font-black text-xs tracking-[0.3em] uppercase">
-            US Launchpad
+            Operations Hub
           </div>
           <h1 className="font-display font-black text-4xl uppercase leading-[0.95] mt-3 text-balance">
             Vyplň <span className="bg-brand text-brand-foreground px-2 inline-block">kvíz</span>
@@ -117,7 +117,7 @@ export default function SoloQuiz({ questions }: { questions: SoloQuestion[] }) {
                 className="mt-0.5 w-5 h-5 shrink-0 accent-brand cursor-pointer"
               />
               <span>
-                Souhlasím, aby US Launchpad uložil můj e-mail a použil ho pro
+                Souhlasím, aby Operations Hub uložil můj e-mail a použil ho pro
                 zaslání odměny a další komunikaci.
               </span>
             </label>

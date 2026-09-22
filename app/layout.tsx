@@ -17,8 +17,8 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: "US Launchpad Quiz",
-  description: "Live quiz · US Launchpad meetup",
+  title: "Operations Hub Quiz",
+  description: "Live quiz · Operations Hub meetup",
 };
 
 export const viewport: Viewport = {
