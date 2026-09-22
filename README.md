@@ -17,8 +17,13 @@ Built on Next.js (App Router) + Socket.IO. State is in-memory; needs no database
 Self-serve and self-paced, for collecting contacts:
 
 1. Visitor enters their email and ticks a consent box.
-2. The quiz starts immediately — same `questions.json`, no timer, answers changeable via "Zpět".
-3. A thank-you screen shows their score.
+2. The quiz starts immediately — same `questions.json`, no time limit, answers changeable via "Zpět".
+3. A thank-you screen shows their score and how long they took.
+
+Rewards go to the top three: highest score first, shorter time breaking a tie.
+The completion time is measured **on the server**, between `/api/solo/start`
+and `/api/solo/finish`, not from a clock the browser reports — it decides who
+places, so it shouldn't be something a participant can edit.
 
 Emails are stored in Postgres so rewards and follow-up can be sent. The two
 quizzes share only `questions.json` and the colour palette — the solo quiz
@@ -40,9 +45,19 @@ the thing that actually matters; capturing it up front means a later failure
 /api/solo/export?secret=<ADMIN_SECRET>
 ```
 
-Returns CSV: `email, consent, score, total, attempts, created_at, completed_at`.
+Returns CSV: `rank, email, consent, score, total, duration_ms, duration,
+attempts, created_at, completed_at`.
+
+**Rows are ordered by standing, so the reward winners are the first three
+lines.** Ranking is score descending, then duration ascending. Anyone who never
+finished sorts last with a blank rank rather than being ranked among finishers.
+
 One row per address — a repeat visitor bumps `attempts` and keeps their best
-score rather than creating a duplicate.
+attempt whole: if a retake scores worse, its score, answers *and* time are all
+discarded together, so a stored time always belongs to the stored score.
+
+Rows created before timing was added have a blank `duration`, and rank on score
+alone.
 
 ## Local development
 

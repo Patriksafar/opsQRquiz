@@ -19,6 +19,14 @@ function csvCell(value: unknown): string {
   return /[",\n\r]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
 }
 
+function formatDuration(ms: number | null): string {
+  if (ms === null || ms === undefined) return "";
+  const totalSeconds = Math.round(ms / 1000);
+  const minutes = Math.floor(totalSeconds / 60);
+  const seconds = totalSeconds % 60;
+  return `${minutes}:${String(seconds).padStart(2, "0")}`;
+}
+
 export async function GET(req: Request) {
   const adminSecret = process.env.ADMIN_SECRET;
   const provided = new URL(req.url).searchParams.get("secret");
@@ -29,11 +37,16 @@ export async function GET(req: Request) {
 
   try {
     const rows = await listParticipants();
+    // Rows come back ordered by standing, so the reward winners are the
+    // first three lines of the file.
     const header = [
+      "rank",
       "email",
       "consent",
       "score",
       "total",
+      "duration_ms",
+      "duration",
       "attempts",
       "created_at",
       "completed_at",
@@ -42,10 +55,14 @@ export async function GET(req: Request) {
       header.join(","),
       ...rows.map((r) =>
         [
+          r.rank,
           r.email,
           r.consent,
           r.score,
           r.total,
+          r.duration_ms,
+          // Raw ms for sorting, m:ss alongside it for reading.
+          formatDuration(r.duration_ms),
           r.attempts,
           r.created_at,
           r.completed_at,
