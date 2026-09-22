@@ -27,13 +27,13 @@
     "correctIndex": 1
   },
   {
-    "text": "Budovu, ve které se nyní nacházíme, byste zařadili do jaké kategorie dle požárního nebezpečí?",
+    "text": "V jakém případě zřizujeme požární hlídku?",
     "options": [
-      "Bez zvýšeného požárního nebezpečí",
-      "Se zvýšeným požárním nebezpečím",
-      "S vysokým požárním nebezpečím"
+      "V případě, že se na pracovišti vyskytují současně min. 3 zaměstnanci, v prostorách s vyšším požárním nebezpečím",
+      "V případě, kdy máme prvního zaměstnance a máme vlastní prostory",
+      "V případě, že má firma nejméně 20 zaměstnanců a pouze v budovách s vysokým požárním nebezpečím."
     ],
-    "correctIndex": 1
+    "correctIndex": 0
   },
   {
     "text": "Co je součástí dokumentace PO (požární ochrany)?",
@@ -45,8 +45,12 @@
     "correctIndex": 0
   },
   {
-    "text": "Záznamy o pracovní době zaměstnanců je nám, dle zákona o účetnictví, nařízeno uchovávat:",
-    "options": ["2 roky", "5 let", "10 let"],
+    "text": "Kdy nejpozději nastupuje těhotná zaměstnankyně na mateřskou dovolenou?",
+    "options": [
+      "Nejpozději 4 týdne před plánovaným termínem porodu",
+      "Dokončí směnu a zhasne",
+      "Nejpozději 6 týdnů před plánovaným termínem porodu"
+    ],
     "correctIndex": 2
   },
   {
@@ -60,12 +64,20 @@
   },
   {
     "text": "Kdy musí zaměstnavatel nahlásit incident spojený s únikem nebo ztrátou osobních údajů Úřadu pro ochranu osobních údajů?",
-    "options": ["Ihned bez prodlení", "Do 48 hodin", "Do 72 hodin"],
+    "options": [
+      "Ihned bez prodlení",
+      "Do 48 hodin",
+      "Do 72 hodin"
+    ],
     "correctIndex": 2
   },
   {
     "text": "Který z následujících nákladů bývá standardně neuznatelný při vyúčtování služební cesty?",
-    "options": ["Jízdenka na vlak", "Ubytování schválené firmou", "Soukromé wellness"],
+    "options": [
+      "Jízdenka na vlak",
+      "Ubytování schválené firmou",
+      "Soukromé wellness"
+    ],
     "correctIndex": 2
   },
   {
