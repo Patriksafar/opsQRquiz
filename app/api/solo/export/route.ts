@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { DbNotConfiguredError, listParticipants } from "@/lib/db";
+import { loadQuestions } from "@/lib/solo";
 
 export const dynamic = "force-dynamic";
 
@@ -27,6 +28,15 @@ function formatDuration(ms: number | null): string {
   return `${minutes}:${String(seconds).padStart(2, "0")}`;
 }
 
+/**
+ * The driver hands timestamptz back as a Date, and String(Date) drops the
+ * milliseconds and isn't something a spreadsheet parses — so emit ISO 8601.
+ */
+function formatTimestamp(value: Date | string | null): string {
+  if (value === null || value === undefined) return "";
+  return value instanceof Date ? value.toISOString() : String(value);
+}
+
 export async function GET(req: Request) {
   const adminSecret = process.env.ADMIN_SECRET;
   const provided = new URL(req.url).searchParams.get("secret");
@@ -37,6 +47,7 @@ export async function GET(req: Request) {
 
   try {
     const rows = await listParticipants();
+    const questions = loadQuestions();
     // Rows come back ordered by standing, so the reward winners are the
     // first three lines of the file.
     const header = [
@@ -49,7 +60,11 @@ export async function GET(req: Request) {
       "duration",
       "attempts",
       "created_at",
+      "started_at",
       "completed_at",
+      // The picked option (1-based) per question, from the best attempt,
+      // followed by whether it was right.
+      ...questions.flatMap((_, i) => [`q${i + 1}`, `q${i + 1}_correct`]),
     ];
     const csv = [
       header.join(","),
@@ -64,8 +79,15 @@ export async function GET(req: Request) {
           // Raw ms for sorting, m:ss alongside it for reading.
           formatDuration(r.duration_ms),
           r.attempts,
-          r.created_at,
-          r.completed_at,
+          formatTimestamp(r.created_at),
+          formatTimestamp(r.started_at),
+          formatTimestamp(r.completed_at),
+          ...questions.flatMap((q, i): unknown[] => {
+            if (!r.answers) return ["", ""];
+            const picked = r.answers[i];
+            if (picked === null || picked === undefined) return ["", "false"];
+            return [picked + 1, picked === q.correctIndex];
+          }),
         ]
           .map(csvCell)
           .join(","),

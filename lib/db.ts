@@ -141,8 +141,10 @@ export type ParticipantRow = {
   total: number | null;
   duration_ms: number | null;
   attempts: number;
-  created_at: string;
-  completed_at: string | null;
+  answers: (number | null)[] | null;
+  created_at: Date | string;
+  started_at: Date | string | null;
+  completed_at: Date | string | null;
 };
 
 /**
@@ -163,8 +165,8 @@ export async function listParticipants(): Promise<ParticipantRow[]> {
                            duration_ms asc nulls last
                 )
            end as rank,
-           email, consent, score, total, duration_ms, attempts,
-           created_at, completed_at
+           email, consent, score, total, duration_ms, attempts, answers,
+           created_at, started_at, completed_at
       from solo_participants
      order by completed_at is null,
               score desc nulls last,
