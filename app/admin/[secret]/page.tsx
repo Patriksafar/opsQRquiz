@@ -107,12 +107,20 @@ export default function AdminPage() {
             Hráči ({state.players.length})
           </h2>
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-            {state.players.map((p) => (
+            {/* Highest score first. `players` arrives in join order and the
+                sort is stable, so ties keep join order — the same tie-break
+                the display's leaderboard uses. */}
+            {[...state.players]
+              .sort((a, b) => b.score - a.score)
+              .map((p, i) => (
               <div
                 key={p.id}
-                className="bg-card text-card-foreground border border-card-border rounded-xl px-4 py-3 flex justify-between items-center"
+                className="bg-card text-card-foreground border border-card-border rounded-xl px-4 py-3 flex justify-between items-center gap-2"
               >
-                <span className="font-semibold">{p.nickname}</span>
+                <span className="font-semibold">
+                  <span className="text-card-foreground-subtle tabular-nums mr-2">{i + 1}.</span>
+                  {p.nickname}
+                </span>
                 <span className="font-display font-black tabular-nums text-brand">
                   {p.score}
                 </span>
