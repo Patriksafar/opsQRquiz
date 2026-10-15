@@ -1,14 +1,22 @@
 # QR codes
 
-All three encode the same URL:
+Two sets, one per quiz. Don't mix them up — they point to different quizzes.
 
-    https://opsquiz.onrender.com/solo
+**Solo quiz** — `https://opsquiz.onrender.com/solo`
 
 | File | Use |
 |------|-----|
 | `solo-quiz-brand.png` | Yellow on plum, matching the app. Slides and screens. 1600px. |
 | `solo-quiz-print.png` | Black on white. Print and posters. 1600px. |
 | `solo-quiz.svg` | Vector. Scales to any size without softening the edges. |
+
+**Live game** (join page) — `https://opsquiz.onrender.com/`
+
+| File | Use |
+|------|-----|
+| `live-game-brand.png` | Yellow on plum, matching the app. Slides and screens. 1600px. |
+| `live-game-print.png` | Black on white. Print and posters. 1600px. |
+| `live-game.svg` | Vector. Scales to any size without softening the edges. |
 
 Error correction is level **H** (30% recoverable), so the code still scans
 through print glare, an angled phone, or a logo dropped in the middle. The URL
@@ -30,6 +38,9 @@ await QRCode.toFile("qr/solo-quiz-print.png", url, { ...common, width: 1600, col
 writeFileSync("qr/solo-quiz.svg", await QRCode.toString(url, { ...common, type: "svg", color: { dark: "#000000", light: "#FFFFFF" } }));
 '
 ```
+
+The live-game set is the same script with `url = "https://opsquiz.onrender.com/"`
+and the `solo-quiz` file names replaced by `live-game`.
 
 Note the live **display** view (`/display`) generates its own QR at runtime from
 whatever host the browser is on, so it never needs these files. These are for
