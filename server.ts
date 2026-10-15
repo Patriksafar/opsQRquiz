@@ -15,7 +15,7 @@ const dev = process.env.NODE_ENV !== "production";
 const adminSecret = process.env.ADMIN_SECRET ?? "change-me";
 
 const questions = JSON.parse(
-  readFileSync(resolve(process.cwd(), "questions.json"), "utf-8"),
+  readFileSync(resolve(process.cwd(), "live-questions.json"), "utf-8"),
 ) as Question[];
 
 const game = new GameEngine(questions);

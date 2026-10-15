@@ -17,7 +17,7 @@ Built on Next.js (App Router) + Socket.IO. State is in-memory; needs no database
 Self-serve and self-paced, for collecting contacts:
 
 1. Visitor enters their email and ticks a consent box.
-2. The quiz starts immediately — same `questions.json`, no time limit, answers changeable via "Zpět".
+2. The quiz starts immediately — questions from `questions.json`, no time limit, answers changeable via "Zpět".
 3. A thank-you screen shows their score and how long they took.
 
 Rewards go to the top three: highest score first, shorter time breaking a tie.
@@ -26,7 +26,7 @@ and `/api/solo/finish`, not from a clock the browser reports — it decides who
 places, so it shouldn't be something a participant can edit.
 
 Emails are stored in Postgres so rewards and follow-up can be sent. The two
-quizzes share only `questions.json` and the colour palette — the solo quiz
+quizzes share only the colour palette and the `Question` format — the solo quiz
 never touches the live game's state, and the live game never needs the
 database.
 
@@ -85,7 +85,13 @@ Then visit `http://<your-ip>:3000/display`. The QR will encode the host shown in
 
 ## Configuring questions
 
-Edit `questions.json` at the repo root. Each entry:
+Each quiz has its own file at the repo root:
+
+- `live-questions.json` — the live multiplayer game (`/`, `/display`)
+- `questions.json` — the solo quiz (`/solo`). Changing it regrades nothing
+  retroactively, so avoid editing it mid-campaign.
+
+Each entry:
 
 ```json
 {

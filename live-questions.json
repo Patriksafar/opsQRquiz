@@ -1,0 +1,92 @@
+[
+  {
+    "text": "Jak mohou AI nástroje zvýšit produktivitu firmy?",
+    "options": [
+      "2,5×",
+      "Maximálně o 5 %",
+      "Tím, že zaměstnancům přidají další tři nástroje a pět nových meetingů."
+    ],
+    "correctIndex": 0
+  },
+  {
+    "text": "Podle World Economic Forum bude v blízké budoucnosti AI gramotnost chápána jako:",
+    "options": [
+      "Výhoda pro IT specialisty",
+      "Trend, který zmizí s další aktualizací ChatGPT",
+      "Klíčová dovednost"
+    ],
+    "correctIndex": 2
+  },
+  {
+    "text": "Při zavádění AI nástrojů:",
+    "options": [
+      "Zapojíme jen IT a ostatní ať si jedou ve svých excelech",
+      "Necháme rozhodnutí výhradně na managementu a ostatním pošleme návod, až bude hotovo.",
+      "Ideálně zapojíme všechny týmy."
+    ],
+    "correctIndex": 2
+  },
+  {
+    "text": "Co by mohlo firmě pomoci při nastavování AI nástrojů?",
+    "options": [
+      "Metoda cukru a biče",
+      "Nastavení KPI pro zaměstnance a týmy",
+      "Nákup co nejvíce AI nástrojů a doufání, že se produktivita nějak dostaví"
+    ],
+    "correctIndex": 1
+  },
+  {
+    "text": "Jak přínosné jsou workshopy při zavádění nebo úpravě AI procesů?",
+    "options": [
+      "Jsou přínosné, a to pro zaměstnance, kteří již mají s AI nástroji předchozí zkušenosti.",
+      "Velmi. Zaměstnanci dobře vědí, s čím potřebují pomoci a co lze automatizovat prostřednictvím AI",
+      "Jejich hlavním cílem je naučit všechny správně používat prompt „Napiš mi to lépe“."
+    ],
+    "correctIndex": 1
+  },
+  {
+    "text": "Proč nám jasně nastavené firemní OKR mohou pomoci při implementaci AI?",
+    "options": [
+      "OKR nám poskytují vysněný cíl, který lze splnit jedině pomocí kouzelné hůlky, a ne AI nástrojů.",
+      "OKR nám dávají disciplínu, jasný směr a rychlost.",
+      "OKR nám pomáhají definovat cíle, ale jejich hlavním přínosem je především kontrola plnění úkolů jednotlivých zaměstnanců."
+    ],
+    "correctIndex": 1
+  },
+  {
+    "text": "Když má společnost zmrazený marketingový budget, může efektivně pomoci:",
+    "options": [
+      "AI agent pro tvorbu obsahu, videí a grafiky",
+      "Využít AI především k analýze konkurence, protože díky tomu odpadne potřeba investovat do vlastní marketingové tvorby",
+      "Říct kolegyni z financí, ať místo výplat natočí pár reelsek"
+    ],
+    "correctIndex": 0
+  },
+  {
+    "text": "V oblasti Salesu nám AI nástroje usnadní práci díky:",
+    "options": [
+      "Automatickým zápisům z meetingů, přípravě follow-up e-mailů a vyplňování CRM.",
+      "Automatickému navázání osobního a přátelského vztahu s potenciálním klientem, které zaručí uzavření obchodu.",
+      "Automatickým zápisům z meetingů, přípravě follow-up e-mailů a vyjednáváním podmínek s klienty."
+    ],
+    "correctIndex": 0
+  },
+  {
+    "text": "HR a implementace AI nástrojů:",
+    "options": [
+      "Nejdou dohromady. V HR je přípustná pouze osobní komunikace s živým člověkem.",
+      "Mohou být efektivní například při optimalizaci repetitivní komunikace, základním screeningu nebo automatických follow-upech.",
+      "AI převezme veškerou komunikaci s kandidáty, takže HR se může plně soustředit na výběr firemních vánočních dárků."
+    ],
+    "correctIndex": 1
+  },
+  {
+    "text": "Jak funguje vibe coding?",
+    "options": [
+      "Vývojář popisuje problém přirozeným jazykem, AI generuje draft kódu, člověk upravuje a kontroluje, interakce jsou rychlejší",
+      "Vývojář zadá AI požadavek a jde na dovolenou. Testování i odpovědnost přebírá umělá inteligence.",
+      "Vývojář popisuje problém přirozeným jazykem, AI generuje draft kódu, AI upravuje a kontroluje, interakce jsou 2,5× rychlejší."
+    ],
+    "correctIndex": 0
+  }
+]
